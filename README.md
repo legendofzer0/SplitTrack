@@ -1,75 +1,24 @@
-# Nuxt Minimal Starter
+#Split Track
 
-Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+Split Track is a budgeting and bill-splitting app designed to help users track expenses,
+manage budgets, and fairly split bills among friends or groups.
 
-## Setup
+##Features
 
-Make sure to install dependencies:
+-Expense Tracking: Keep track of personal and group expenses.
 
-```bash
-# npm
-npm install
+-Bill Splitting: Automatically calculate each member’s share in a group.
 
-# pnpm
-pnpm install
+-Group Management: Create and manage groups for easier expense sharing.
 
-# yarn
-yarn install
+-Budget Overview: Visual summaries of expenses to manage budgets effectively.
 
-# bun
-bun install
-```
+-Authentication: Secure user login and registration.
 
-## Development Server
+##Tech Stack
 
-Start the development server on `http://localhost:3000`:
+Frontend: Nuxt 3, Vue 3, Tailwind CSS
 
-```bash
-# npm
-npm run dev
+Backend / ORM: Drizzle ORM with PostgreSQL
 
-# pnpm
-pnpm dev
-
-# yarn
-yarn dev
-
-# bun
-bun run dev
-```
-
-## Production
-
-Build the application for production:
-
-```bash
-# npm
-npm run build
-
-# pnpm
-pnpm build
-
-# yarn
-yarn build
-
-# bun
-bun run build
-```
-
-Locally preview production build:
-
-```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+Database: PostgreSQL
