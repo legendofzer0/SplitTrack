@@ -5,15 +5,15 @@ manage budgets, and fairly split bills among friends or groups.
 
 ## Features
 
--Expense Tracking: Keep track of personal and group expenses.
+-   Expense Tracking: Keep track of personal and group expenses.
 
--Bill Splitting: Automatically calculate each member’s share in a group.
+-   Bill Splitting: Automatically calculate each member’s share in a group.
 
--Group Management: Create and manage groups for easier expense sharing.
+-   Group Management: Create and manage groups for easier expense sharing.
 
--Budget Overview: Visual summaries of expenses to manage budgets effectively.
+-   Budget Overview: Visual summaries of expenses to manage budgets effectively.
 
--Authentication: Secure user login and registration.
+-   Authentication: Secure user login and registration.
 
 ## Tech Stack
 
