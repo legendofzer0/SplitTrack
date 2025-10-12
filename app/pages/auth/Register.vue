@@ -61,6 +61,7 @@
 	import { reactive, ref } from "vue";
 	import emailPattern from "~/const/EMAIL_REGEX";
 	import PASSWORD_REGEX from "~/const/PASSWORD_REGEX";
+	import { useAuthStore } from "~/store/useAuthStore";
 	const formData = reactive({
 		email: "",
 		password: "",
@@ -130,8 +131,12 @@
 		}
 
 		if (isValid) {
-			console.log("Form submitted:", formData);
-			console.log("Confirm Password:", confirmPassword.value);
+			try {
+				const auth = useAuthStore();
+				auth.register(formData);
+			} catch (error) {
+				console.error(error);
+			}
 		}
 	}
 </script>

@@ -1,8 +1,6 @@
-const register = {
-	email: String,
-	password: String,
-	name: String,
-	phone_number: Number,
+export type Register = {
+	email: string;
+	password: string;
+	name: string;
+	phone_number: string;
 };
-
-export default register;
