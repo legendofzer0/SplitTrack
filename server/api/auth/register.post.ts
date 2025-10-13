@@ -1,6 +1,5 @@
 import { db } from "~~/server/db";
 import { usersTable } from "~~/server/db/schemas";
-import bcrypt from "bcrypt";
 import emailPattern from "~~/server/const/EMAIL_REGEX";
 import PASSWORD_REGEX from "~~/server/const/PASSWORD_REGEX";
 
@@ -8,14 +7,24 @@ export default defineEventHandler(async (event) => {
 	const data: RegisterData = await readBody(event);
 
 	try {
-		if (!data.email || !data.name || !data.password || !data.phone_number) {
-			return { statusCode: 400, message: "All fields are required" };
+		if (
+			!data ||
+			!data.email ||
+			!data.name ||
+			!data.password ||
+			!data.phone_number
+		) {
+			setResponseStatus(event, 400, "All field are required");
+			return { message: "All fields are required" };
 		}
 		if (!emailPattern.test(data.email)) {
-			return { statusCode: 400, message: "email is invalid" };
+			setResponseStatus(event, 400, "Email does not match");
+
+			return { message: "email is invalid" };
 		}
 		if (!PASSWORD_REGEX.test(data.password)) {
-			return { statusCode: 400, message: "Password is invalid" };
+			setResponseStatus(event, 400, "Password is not valid");
+			return { message: "Password is invalid" };
 		}
 		const hashedPassword = await generateHashedPassword(data.password);
 
@@ -26,7 +35,8 @@ export default defineEventHandler(async (event) => {
 			phone_number: data.phone_number,
 		});
 
-		return { statusCode: 200, message: "User registered successfully" };
+		setResponseStatus(event, 200, "User registered successfully");
+		return { message: "User registered successfully" };
 	} catch (error) {
 		console.error(error);
 		throw createError({
@@ -35,11 +45,6 @@ export default defineEventHandler(async (event) => {
 		});
 	}
 });
-
-async function generateHashedPassword(plainPassword: string): Promise<string> {
-	const saltRounds = 10;
-	return await bcrypt.hash(plainPassword, saltRounds);
-}
 
 type RegisterData = {
 	email: string;

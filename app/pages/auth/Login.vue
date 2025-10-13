@@ -24,6 +24,10 @@
 				>Login</BaseButton
 			>
 		</form>
+		<p>
+			Don't have a account
+			<BaseLink to="/auth/register" variant="inline">Register</BaseLink>
+		</p>
 	</div>
 </template>
 
@@ -31,6 +35,9 @@
 	import { reactive } from "vue";
 	import emailPattern from "~/const/EMAIL_REGEX";
 	import PASSWORD_REGEX from "~/const/PASSWORD_REGEX";
+	import { useAuthStore } from "~/store/useAuthStore";
+	const toast = useToast();
+	const auth = useAuthStore();
 	const formData = reactive({
 		email: "",
 		password: "",
@@ -40,7 +47,7 @@
 		password: "",
 	});
 
-	function login() {
+	async function login() {
 		var isValid = true;
 		errorData.email = "";
 		errorData.password = "";
@@ -66,7 +73,13 @@
 			isValid = false;
 		}
 		if (isValid) {
-			console.log(formData);
+			const isLogin = await auth.login(formData);
+			if (isLogin) {
+				toast.success({ message: "Login Successful" });
+				navigateTo("/");
+			} else {
+				toast.error({ message: "Either Email and Password is wrong" });
+			}
 		}
 	}
 </script>

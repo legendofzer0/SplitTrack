@@ -62,6 +62,7 @@
 	import emailPattern from "~/const/EMAIL_REGEX";
 	import PASSWORD_REGEX from "~/const/PASSWORD_REGEX";
 	import { useAuthStore } from "~/store/useAuthStore";
+	const toast = useToast();
 	const formData = reactive({
 		email: "",
 		password: "",
@@ -77,7 +78,7 @@
 	});
 	const confirmPassword = ref("");
 
-	function submitForm() {
+	async function submitForm() {
 		errorData.email = "";
 		errorData.password = "";
 		errorData.name = "";
@@ -133,7 +134,20 @@
 		if (isValid) {
 			try {
 				const auth = useAuthStore();
-				auth.register(formData);
+				try {
+					const response = await auth.register(formData);
+					toast.success({
+						title: "Success",
+						message: "User Registration sucessfull",
+					});
+					navigateTo("/auth/login");
+				} catch (err) {
+					console.error("Registration failed:", err);
+					toast.error({
+						title: "error",
+						message: "User Registration failed",
+					});
+				}
 			} catch (error) {
 				console.error(error);
 			}

@@ -1,37 +1,46 @@
 import type { Register } from "~/types/register";
 import { defineStore } from "pinia";
+import type { Login } from "~/types/login";
 
 export const useAuthStore = defineStore("auth", {
 	state: () => ({ isLoggedIn: false, token: "" }),
 	actions: {
-		login() {
-			this.isLoggedIn = true;
-			this.token = "FakeToken";
-			localStorage.setItem("token", this.token);
+		async login(LoginData: Login) {
+			try {
+				const { data, error } = await useFetch("/api/auth/login", {
+					method: "POST",
+					body: LoginData,
+				});
+
+				if (error.value) {
+					throw new Error("Invalid credentials or server error");
+				}
+
+				if (!data.value || !data.value.token) {
+					throw new Error("Token not received from server");
+				}
+				this.token = data.value.token;
+				this.isLoggedIn = true;
+				localStorage.setItem("token", this.token);
+				return true;
+			} catch (err) {
+				console.error("Login error:", err);
+				throw err;
+			}
 		},
+
 		async register(formData: Register) {
 			const { data, error } = await useFetch("/api/auth/register", {
 				method: "POST",
 				body: formData,
 			});
-			console.log(data);
-			console.log(error);
 
 			if (error.value) {
-				console.error(
-					"Registration failed:",
-					error.value.data?.message || error.value
-				);
-				return {
-					success: false,
-					message: error.value.data?.message || "Registration failed",
-				};
+				console.error("Registration failed:", error.value);
+				throw error.value;
 			}
 
-			return {
-				success: true,
-				message: data.value?.message || "User registered successfully",
-			};
+			return data.value;
 		},
 
 		logout() {
