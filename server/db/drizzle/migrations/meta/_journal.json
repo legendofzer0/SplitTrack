@@ -29,6 +29,27 @@
       "when": 1760188296509,
       "tag": "0003_even_sentinel",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1760433794574,
+      "tag": "0004_sudden_frank_castle",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1760437459676,
+      "tag": "0005_ordinary_mikhail_rasputin",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1760523336652,
+      "tag": "0006_silly_the_liberteens",
+      "breakpoints": true
     }
   ]
 }

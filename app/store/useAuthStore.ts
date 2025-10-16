@@ -47,5 +47,15 @@ export const useAuthStore = defineStore("auth", {
 			this.isLoggedIn = false;
 			localStorage.removeItem("token");
 		},
+
+		initializeAuth() {
+			if (import.meta.client) {
+				const token = localStorage.getItem("token");
+				if (token) {
+					this.token = token;
+					this.isLoggedIn = true;
+				}
+			}
+		},
 	},
 });

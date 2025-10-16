@@ -1,0 +1,1 @@
+ALTER TYPE "public"."split_type_enum" ADD VALUE 'none';

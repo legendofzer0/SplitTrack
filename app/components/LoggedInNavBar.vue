@@ -12,25 +12,8 @@
 				<div
 					class="hidden md:flex md:items-center md:space-x-6 font-medium"
 				>
-					<NuxtLink
-						to="/"
-						class="block px-3 py-2 rounded-md text-base font-medium text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
-						active-class="bg-gray-200 dark:bg-gray-800"
-					>
-						Home
-					</NuxtLink>
-
-					<NuxtLink
-						to="#"
-						class="hover:text-blue-600 dark:hover:text-blue-400"
-						>Contact</NuxtLink
-					>
-					<button
-						class="ml-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600"
-						@click="navigateToRegister()"
-					>
-						Get Started
-					</button>
+					<BaseLink to="/"> Home </BaseLink>
+					<BaseLink to="/expences"> Expense </BaseLink>
 				</div>
 
 				<div class="flex items-center md:hidden">
@@ -49,25 +32,12 @@
 			class="md:hidden bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700"
 		>
 			<div class="px-2 pt-2 pb-3 space-y-1">
-				<NuxtLink
-					to="/"
-					class="block px-3 py-2 rounded-md text-base font-medium text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
-					active-class="bg-gray-200 dark:bg-gray-800"
-				>
+				<BaseLink to="/" @click="isOpen = false" :isFull="true">
 					Home
-				</NuxtLink>
-
-				<NuxtLink
-					to="#"
-					class="block px-3 py-2 rounded-md text-base font-medium text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
-					>Contact</NuxtLink
-				>
-				<button
-					class="w-full mt-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600"
-					@click="navigateToRegister()"
-				>
-					Get Started
-				</button>
+				</BaseLink>
+				<BaseLink to="/expences" @click="isOpen = false" :isFull="true">
+					Expense
+				</BaseLink>
 			</div>
 		</div>
 	</nav>
@@ -76,8 +46,4 @@
 <script setup lang="ts">
 	import { ref } from "vue";
 	const isOpen = ref(false);
-
-	function navigateToRegister(): void {
-		navigateTo("/auth/register");
-	}
 </script>

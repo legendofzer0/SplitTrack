@@ -9,7 +9,7 @@ export default defineNuxtRouteMiddleware((to, from) => {
 		return;
 	}
 
-	if (!auth.isLoggedIn) {
+	if (auth.isLoggedIn) {
 		return navigateTo("/auth/login");
 	}
 
