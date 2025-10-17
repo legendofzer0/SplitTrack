@@ -50,6 +50,13 @@
       "when": 1760523336652,
       "tag": "0006_silly_the_liberteens",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1760594207024,
+      "tag": "0007_tricky_mister_sinister",
+      "breakpoints": true
     }
   ]
 }

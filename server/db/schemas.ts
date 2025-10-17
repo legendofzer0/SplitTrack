@@ -41,8 +41,6 @@ export const budgetsTable = pgTable("budgets", {
 	title: varchar("title", { length: 255 }).notNull(),
 	totalAmount: numeric("total_amount", { precision: 12, scale: 2 }).notNull(),
 	currency: varchar("currency", { length: 10 }).notNull().default("NPR"),
-	startDate: date("start_date").notNull(),
-	endDate: date("end_date"),
 	createdAt: timestamp("created_at").notNull().defaultNow(),
 });
 export const expensesTable = pgTable("expenses", {
