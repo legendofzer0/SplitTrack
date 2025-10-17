@@ -3,15 +3,21 @@ import { verifyToken } from "../utils/JWT_Utility";
 import { error } from "console";
 
 export default defineEventHandler(async (event) => {
-	const allowedURIs = ["/", "/api/auth/login", "/api/auth/register"];
+	const allowedURIs = [
+		"/",
+		"/api/auth/login",
+		"/api/auth/register",
+		"/api/auth/verifyToken",
+	];
 	const path = event.path;
-	// console.log("Middleware triggered at path", path);
-	// console.log("is in allowedURIs", allowedURIs.includes(path));
+	if (!path.startsWith("/api")) {
+		return;
+	}
 	if (allowedURIs.includes(path)) {
 		return;
 	}
 
-	const authToken = getHeader(event, "authorization") || "";
+	const authToken = getHeader(event, "Authorization") || "";
 
 	if (!authToken) {
 		setResponseStatus(event, 403, "Authorized users only");

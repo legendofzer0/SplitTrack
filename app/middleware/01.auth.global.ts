@@ -9,10 +9,12 @@ export default defineNuxtRouteMiddleware((to, from) => {
 		return;
 	}
 
-	if (auth.isLoggedIn) {
+	if (!auth.isLoggedIn) {
 		return navigateTo("/auth/login");
 	}
 
 	//TODO : Add jwt verification here
+	const token = auth.token;
+	
 	return;
 });

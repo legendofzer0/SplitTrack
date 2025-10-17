@@ -5,7 +5,7 @@
 				<div class="flex-shrink-0 flex items-center">
 					<span
 						class="text-2xl font-bold text-blue-600 dark:text-blue-400"
-						>Split Track</span
+						>Split Track (Logged in)</span
 					>
 				</div>
 
@@ -13,7 +13,7 @@
 					class="hidden md:flex md:items-center md:space-x-6 font-medium"
 				>
 					<BaseLink to="/"> Home </BaseLink>
-					<BaseLink to="/expences"> Expense </BaseLink>
+					<BaseLink to="/Expenses"> Expense </BaseLink>
 				</div>
 
 				<div class="flex items-center md:hidden">
@@ -35,7 +35,7 @@
 				<BaseLink to="/" @click="isOpen = false" :isFull="true">
 					Home
 				</BaseLink>
-				<BaseLink to="/expences" @click="isOpen = false" :isFull="true">
+				<BaseLink to="/Expenses" @click="isOpen = false" :isFull="true">
 					Expense
 				</BaseLink>
 			</div>
