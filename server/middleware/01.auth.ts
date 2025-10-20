@@ -7,7 +7,7 @@ export default defineEventHandler(async (event) => {
 		"/",
 		"/api/auth/login",
 		"/api/auth/register",
-		"/api/auth/verifyToken",
+		"/api/auth/verify-token",
 	];
 	const path = event.path;
 	if (!path.startsWith("/api")) {

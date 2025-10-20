@@ -5,15 +5,19 @@
 				<div class="flex-shrink-0 flex items-center">
 					<span
 						class="text-2xl font-bold text-blue-600 dark:text-blue-400"
-						>Split Track (Logged in)</span
-					>
+						>Split Track
+					</span>
 				</div>
 
 				<div
 					class="hidden md:flex md:items-center md:space-x-6 font-medium"
 				>
-					<BaseLink to="/"> Home </BaseLink>
-					<BaseLink to="/Expenses"> Expense </BaseLink>
+					<BaseLink to="/dashboard"> Dashboard </BaseLink>
+					<BaseLink to="/expenses"> Expense </BaseLink>
+					<BaseLink to="/budget"> Budget </BaseLink>
+					<BaseButton variant="danger" @click="auth.logout()"
+						>Logout</BaseButton
+					>
 				</div>
 
 				<div class="flex items-center md:hidden">
@@ -33,11 +37,20 @@
 		>
 			<div class="px-2 pt-2 pb-3 space-y-1">
 				<BaseLink to="/" @click="isOpen = false" :isFull="true">
-					Home
+					Dashboard
 				</BaseLink>
 				<BaseLink to="/Expenses" @click="isOpen = false" :isFull="true">
 					Expense
 				</BaseLink>
+				<BaseLink to="/budget" @click="isOpen = false" :isFull="true">
+					Budget
+				</BaseLink>
+				<BaseButton
+					variant="danger"
+					@click="auth.logout()"
+					:isFull="true"
+					>Logout</BaseButton
+				>
 			</div>
 		</div>
 	</nav>
@@ -45,5 +58,7 @@
 
 <script setup lang="ts">
 	import { ref } from "vue";
+	import { useAuthStore } from "~/store/useAuthStore";
 	const isOpen = ref(false);
+	const auth = useAuthStore();
 </script>

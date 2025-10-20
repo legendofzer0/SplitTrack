@@ -2,7 +2,7 @@
 	<div
 		class="container border rounded-2xl p-5 my-20 md:mx-auto md:m-20 md:w-3xl md:self-center"
 	>
-		<h1 class="text-center text-2xl font-black">Login</h1>
+		<BaseHeading>Login</BaseHeading>
 		<form @submit.prevent="login()">
 			<BaseInput
 				id="email"

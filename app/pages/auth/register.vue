@@ -2,7 +2,7 @@
 	<div
 		class="container border rounded-2xl p-5 my-20 md:mx-auto md:m-20 md:self-center md:w-3xl"
 	>
-		<h1 class="text-center text-2xl font-black">Register</h1>
+		<BaseHeading>Register</BaseHeading>
 
 		<form @submit.prevent="submitForm()">
 			<BaseInput

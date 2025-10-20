@@ -20,7 +20,7 @@ export default defineEventHandler(async (event) => {
 		setResponseStatus(event, 200, "Successfully got data");
 
 		return {
-			ExpensesByCreator: getExpensesByCreator,
+			ExpensesByUser: getExpensesByCreator,
 			ExpensesForUser: getExpensesForUser,
 		};
 	} catch (error) {

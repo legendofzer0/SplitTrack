@@ -1,6 +1,6 @@
 import { useAuthStore } from "~/store/useAuthStore";
 
-export default defineNuxtRouteMiddleware((to, from) => {
+export default defineNuxtRouteMiddleware(async (to, from) => {
 	const auth = useAuthStore();
 
 	const allowedURIs = ["/", "/about", "/auth/register", "/auth/login"];
@@ -13,8 +13,21 @@ export default defineNuxtRouteMiddleware((to, from) => {
 		return navigateTo("/auth/login");
 	}
 
-	//TODO : Add jwt verification here
-	const token = auth.token;
-	
-	return;
+	try {
+		const token = auth.token;
+
+		const { data, error } = await useFetch("/api/auth/verify-token", {
+			method: "GET",
+			headers: {
+				Authorization: `Bearer ${token}`,
+			},
+		});
+
+		if (error.value || !data.value?.isValid) {
+			auth.logout();
+		}
+	} catch (err) {
+		console.error("Token verification failed:", err);
+		auth.logout();
+	}
 });

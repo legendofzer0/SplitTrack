@@ -1,6 +1,10 @@
 import { eq } from "drizzle-orm";
 import { db } from "~~/server/db";
-import { expenseParticipantsTable, expensesTable } from "~~/server/db/schemas";
+import {
+	expenseParticipantsTable,
+	expensesTable,
+	usersTable,
+} from "~~/server/db/schemas";
 
 export default defineEventHandler(async (event) => {
 	const expenseId = getRouterParam(event, "id");
@@ -14,7 +18,11 @@ export default defineEventHandler(async (event) => {
 	const participants = await db
 		.select()
 		.from(expenseParticipantsTable)
-		.where(eq(expenseParticipantsTable.expenseId, expenseId));
+		.where(eq(expenseParticipantsTable.expenseId, expenseId))
+		.fullJoin(
+			usersTable,
+			eq(usersTable.id, expenseParticipantsTable.userId)
+		);
 
 	return {
 		expense: expense[0],

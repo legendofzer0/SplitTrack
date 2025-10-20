@@ -6,7 +6,7 @@ export default defineEventHandler(async (event) => {
 		const userId = event.context.user.id;
 		const data: ExpensePost = await readBody(event);
 		const rawDate = data.date;
-		
+
 		let dateString;
 
 		if (rawDate) {
@@ -27,26 +27,29 @@ export default defineEventHandler(async (event) => {
 		const insertIntroExpenseTable = await db
 			.insert(expensesTable)
 			.values(expenseToInsert)
-			.returning({ id: expensesTable.id });
+			.returning();
 
 		const expenseId = insertIntroExpenseTable[0].id;
-
+		var insertIntoExpenseParticipants;
 		if (data.split_type != SplitType.NONE) {
 			if (data.split_data) {
 				for (const [key, value] of Object.entries(data.split_data)) {
-					const insertIntoExpenseParticipants = await db
+					insertIntoExpenseParticipants = await db
 						.insert(expenseParticipantsTable)
 						.values({
 							expenseId: expenseId,
 							userId: key,
 							amountOwed: value.toString(),
-						});
+						})
+						.returning();
 				}
 			}
 		}
 		setResponseStatus(event, 200, "Expense created successfully");
 		return {
 			message: "Expense created successfully",
+			insertIntroExpenseTable,
+			insertIntoExpenseParticipants,
 		};
 	} catch (error) {
 		setResponseStatus(event, 500, "Internal Server Error");

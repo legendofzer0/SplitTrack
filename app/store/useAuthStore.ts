@@ -3,7 +3,10 @@ import { defineStore } from "pinia";
 import type { Login } from "~/types/login";
 
 export const useAuthStore = defineStore("auth", {
-	state: () => ({ isLoggedIn: false, token: "" }),
+	state: () => ({
+		isLoggedIn: false,
+		token: "",
+	}),
 	actions: {
 		async login(LoginData: Login) {
 			try {
@@ -19,9 +22,15 @@ export const useAuthStore = defineStore("auth", {
 				if (!data.value || !data.value.token) {
 					throw new Error("Token not received from server");
 				}
+
 				this.token = data.value.token;
 				this.isLoggedIn = true;
-				localStorage.setItem("token", this.token);
+				const tokenCookie = useCookie("token", {
+					maxAge: 7 * 24 * 60 * 60, // 7 days expires in
+					sameSite: "strict",
+				});
+				tokenCookie.value = this.token;
+
 				return true;
 			} catch (err) {
 				console.error("Login error:", err);
@@ -45,17 +54,19 @@ export const useAuthStore = defineStore("auth", {
 
 		logout() {
 			this.isLoggedIn = false;
-			localStorage.removeItem("token");
+			this.token = "";
+
+			const tokenCookie = useCookie("token");
+			tokenCookie.value = null;
+
 			navigateTo("/");
 		},
 
 		initializeAuth() {
-			if (import.meta.client) {
-				const token = localStorage.getItem("token");
-				if (token) {
-					this.token = token;
-					this.isLoggedIn = true;
-				}
+			const tokenCookie = useCookie("token");
+			if (tokenCookie.value) {
+				this.token = tokenCookie.value;
+				this.isLoggedIn = true;
 			}
 		},
 	},
