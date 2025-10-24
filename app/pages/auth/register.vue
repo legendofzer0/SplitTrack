@@ -77,6 +77,11 @@
 		phone_number: "",
 	});
 	const confirmPassword = ref("");
+	const auth = useAuthStore();
+
+	if (auth.isLoggedIn) {
+		navigateTo("/dashboard");
+	}
 
 	async function submitForm() {
 		errorData.email = "";
@@ -133,7 +138,6 @@
 
 		if (isValid) {
 			try {
-				const auth = useAuthStore();
 				try {
 					const response = await auth.register(formData);
 					toast.success({

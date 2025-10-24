@@ -11,7 +11,6 @@
 			>
 		</label>
 
-		<!-- ✅ Use inputType instead of type -->
 		<input
 			:id="id"
 			:type="inputType"
@@ -19,15 +18,15 @@
 			:placeholder="placeholder"
 			:disabled="disabled"
 			:class="[
-				'block w-full rounded-lg border focus:outline-none transition duration-150 ease-in-out',
+				'rounded-lg border focus:outline-none transition duration-150 ease-in-out',
 				sizeClasses[size],
+				isInline ? 'blocked w-full' : 'blocked w-3xs md:w-3xl',
 				disabled
 					? 'bg-gray-100 dark:bg-gray-800 cursor-not-allowed opacity-60'
 					: 'bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500',
 			]"
 		/>
 
-		<!-- ✅ Password toggle checkbox -->
 		<p
 			v-if="props.type === 'password'"
 			class="mt-2 flex items-center gap-2"
@@ -47,7 +46,6 @@
 			</label>
 		</p>
 
-		<!-- ✅ Error message -->
 		<p v-if="error" class="mt-1 text-sm text-red-600 dark:text-red-400">
 			{{ error }}
 		</p>
@@ -80,12 +78,14 @@
 			size?: InputSize;
 			disabled?: boolean;
 			requiredData?: boolean;
+			isInline?: boolean;
 		}>(),
 		{
 			type: "text",
 			size: "md",
 			disabled: false,
 			requiredData: false,
+			isInline: true,
 		}
 	);
 
@@ -98,10 +98,8 @@
 		set: (val) => emit("update:modelValue", val),
 	});
 
-	// ✅ Local reactive type
 	const inputType = ref(props.type);
 
-	// Update local type when parent prop changes
 	watch(
 		() => props.type,
 		(newType) => {
@@ -109,7 +107,6 @@
 		}
 	);
 
-	// ✅ Toggle show/hide password
 	function togglePassword() {
 		if (props.type === "password") {
 			inputType.value = !isShowPassword.value ? "text" : "password";

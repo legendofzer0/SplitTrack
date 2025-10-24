@@ -15,6 +15,8 @@
 					<BaseLink to="/dashboard"> Dashboard </BaseLink>
 					<BaseLink to="/expenses"> Expense </BaseLink>
 					<BaseLink to="/budget"> Budget </BaseLink>
+					<BaseLink to="/friends"> Friend </BaseLink>
+
 					<BaseButton variant="danger" @click="auth.logout()"
 						>Logout</BaseButton
 					>
@@ -44,6 +46,9 @@
 				</BaseLink>
 				<BaseLink to="/budget" @click="isOpen = false" :isFull="true">
 					Budget
+				</BaseLink>
+				<BaseLink to="/friends" @click="isOpen = false" :isFull="true">
+					Friends
 				</BaseLink>
 				<BaseButton
 					variant="danger"

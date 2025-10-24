@@ -1,32 +1,72 @@
 import { defineStore } from "pinia";
+
 export const useBudgetStore = defineStore("budget", {
-	state: () => ({}),
+	state: () => ({
+		budgetData: [] as any[],
+	}),
 	actions: {
 		async getBudgets() {
 			try {
 				const token = useCookie("token");
+
 				const { data, error } = await useFetch("/api/budget", {
-					method: "get",
+					method: "GET",
 					headers: {
 						Authorization: token.value
 							? `Bearer ${token.value}`
 							: "",
 					},
 				});
+
 				if (error.value) {
-					console.error("Failed to fetch expenses:", error.value);
+					console.error("Failed to fetch budgets:", error.value);
 					throw error.value;
 				}
 
 				if (!data.value) {
-					console.warn("No expense data received");
+					console.warn("No budget data received");
 					return;
 				}
-				console.log(data.value);
-				return;
+				// console.log(data.value.data);
+				this.budgetData = data.value.data || {};
+				return data.value;
 			} catch (error) {
 				console.error("Error fetching budget:", error);
 			}
 		},
+
+		async createBudgets(payload: BudgetPayload) {
+			try {
+				const token = useCookie("token");
+
+				const { data, error } = await useFetch("/api/budget", {
+					method: "POST",
+					headers: {
+						Authorization: token.value
+							? `Bearer ${token.value}`
+							: "",
+						"Content-Type": "application/json",
+					},
+					body: payload,
+				});
+
+				if (error.value) {
+					console.error("Failed to create budget:", error.value);
+					throw error.value;
+				}
+
+				console.log("Budget created:");
+				this.budgetData.push(data.value?.createdBudget);
+				return data.value;
+			} catch (error) {
+				console.error("Error creating budget:", error);
+			}
+		},
 	},
 });
+
+interface BudgetPayload {
+	title: string;
+	totalAmount: number;
+	currency: string;
+}

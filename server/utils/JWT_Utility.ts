@@ -11,6 +11,11 @@ export function generateJWTToken(userId: string) {
 	});
 }
 
+export function generateToken(userId: string, email: string) {
+	if (!JWT_SECRET) throw new Error("JWT_SECRET not defined in environment");
+	return jwt.sign({ id: userId, email: email }, JWT_SECRET);
+}
+
 export function verifyToken(token: string) {
 	try {
 		return jwt.verify(token, JWT_SECRET);

@@ -5,15 +5,21 @@ export default defineEventHandler(async (event) => {
 	try {
 		const userId = event.context.user.id;
 		const data: budgetForm = await readBody(event);
-		const createBudget = await db.insert(budgetsTable).values({
-			userId: userId,
-			title: data.title,
-			totalAmount: data.total_amount.toString(),
-			currency: data.currency,
-		});
+		console.log(data);
+
+		const createBudget = await db
+			.insert(budgetsTable)
+			.values({
+				userId: userId,
+				title: data.title,
+				totalAmount: data.totalAmount.toString(),
+				currency: data.currency,
+			})
+			.returning();
 		setResponseStatus(event, 200, "Budget Created");
 		return {
 			message: "Budget Created",
+			createdBudget: createBudget,
 		};
 	} catch (error) {
 		setResponseStatus(event, 500, "Internal Server Error");
@@ -26,6 +32,6 @@ export default defineEventHandler(async (event) => {
 
 type budgetForm = {
 	title: string;
-	total_amount: number;
+	totalAmount: number;
 	currency?: string;
 };

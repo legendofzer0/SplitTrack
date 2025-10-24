@@ -57,6 +57,13 @@
       "when": 1760594207024,
       "tag": "0007_tricky_mister_sinister",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1761201482135,
+      "tag": "0008_nosy_callisto",
+      "breakpoints": true
     }
   ]
 }

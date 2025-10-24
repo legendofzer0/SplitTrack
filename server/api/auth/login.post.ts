@@ -39,7 +39,7 @@ export default defineEventHandler(async (event) => {
 		if (isAuthenticated) {
 			const token = generateJWTToken(result[0].id);
 			setResponseStatus(event, 200, "Login successful");
-			return { message: "Login successful", token: token };
+			return { message: "Login successful", token };
 		}
 		setResponseStatus(event, 401, "Email or password is incorrect");
 		return { message: "Email or password is incorrect" };

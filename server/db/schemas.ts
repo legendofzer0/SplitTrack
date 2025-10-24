@@ -80,8 +80,17 @@ export const expenseParticipantsTable = pgTable("expense_participants", {
 
 export const friendsTable = pgTable("friends", {
 	id: uuid("id").primaryKey().defaultRandom(),
-	userId: uuid("user_id").notNull(),
-	friendUserId: uuid("friend_user_id").notNull(),
+	userId: uuid("user_id")
+		.notNull()
+		.references(() => usersTable.id, { onDelete: "cascade" }),
+
+	friendUserId: uuid("friend_user_id")
+		.notNull()
+		.references(() => usersTable.id, { onDelete: "cascade" }),
+	token: varchar("token", { length: 255 }).notNull(),
+	invitation_id: uuid("invitation_id").references(() => invitationsTable.id, {
+		onDelete: "set null",
+	}),
 	status: varchar("status", { length: 50 }).default("pending"),
 });
 
@@ -97,8 +106,14 @@ export const receiptsTable = pgTable("receipts", {
 });
 export const invitationsTable = pgTable("invitations", {
 	id: uuid("id").primaryKey().defaultRandom(),
-	inviterId: uuid("inviter_id").notNull(),
-	inviteeEmail: varchar("invitee_email", { length: 255 }).notNull(),
+	// * user id of person who sent the request
+	inviterId: uuid("inviter_id")
+		.notNull()
+		.references(() => usersTable.id, { onDelete: "cascade" }),
+	// * email of person who receive the request
+	inviteeEmail: varchar("invitee_email", { length: 255 })
+		.notNull()
+		.references(() => usersTable.email, { onDelete: "cascade" }),
 	token: varchar("token", { length: 255 }).notNull(),
 	status: varchar("status", { length: 50 }).default("pending"),
 });

@@ -36,8 +36,13 @@
 	import emailPattern from "~/const/EMAIL_REGEX";
 	import PASSWORD_REGEX from "~/const/PASSWORD_REGEX";
 	import { useAuthStore } from "~/store/useAuthStore";
+
 	const toast = useToast();
 	const auth = useAuthStore();
+
+	if (auth.isLoggedIn) {
+		navigateTo("/dashboard");
+	}
 	const formData = reactive({
 		email: "",
 		password: "",
