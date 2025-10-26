@@ -12,26 +12,20 @@ export const useAuthStore = defineStore("auth", {
 	actions: {
 		async login(LoginData: Login) {
 			try {
-				const { data, error } = await useFetch("/api/auth/login", {
+				const response = await $fetch("/api/auth/login", {
 					method: "POST",
 					body: LoginData,
 				});
-
-				if (error.value) {
-					throw new Error("Invalid credentials or server error");
+				if (response) {
+					this.token = response?.token;
+					this.isLoggedIn = true;
+					const tokenCookie = useCookie("token", {
+						maxAge: 7 * 24 * 60 * 60,
+						sameSite: "strict",
+					});
+					tokenCookie.value = response?.token;
+					return true;
 				}
-
-				if (!data.value || !data.value.token) {
-					throw new Error("Token not received from server");
-				}
-				this.token = data.value.token;
-				this.isLoggedIn = true;
-				const tokenCookie = useCookie("token", {
-					maxAge: 7 * 24 * 60 * 60,
-					sameSite: "strict",
-				});
-				tokenCookie.value = data.value.token;
-				return true;
 			} catch (err) {
 				console.error("Login error:", err);
 				throw err;
@@ -39,17 +33,12 @@ export const useAuthStore = defineStore("auth", {
 		},
 
 		async register(formData: Register) {
-			const { data, error } = await useFetch("/api/auth/register", {
+			const register = await $fetch("/api/auth/register", {
 				method: "POST",
 				body: formData,
 			});
 
-			if (error.value) {
-				console.error("Registration failed:", error.value);
-				throw error.value;
-			}
-
-			return data.value;
+			return register;
 		},
 
 		async logout() {
