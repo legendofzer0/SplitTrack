@@ -18,7 +18,8 @@ export function generateToken(userId: string, email: string) {
 
 export function verifyToken(token: string) {
 	try {
-		return jwt.verify(token, JWT_SECRET);
+		const tokenData = token.replace("Bearer ", "");
+		return jwt.verify(tokenData, JWT_SECRET);
 	} catch (error) {
 		console.error("Invalid token:", error);
 		return null;

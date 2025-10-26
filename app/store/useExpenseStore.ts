@@ -67,7 +67,6 @@ export const useExpenseStore = defineStore("expense", {
 				}
 
 				const fetchedExpense = data.value;
-				console.log(fetchedExpense);
 				return fetchedExpense;
 			} catch (err: any) {
 				if (err.statusCode === 404) {

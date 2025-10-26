@@ -5,7 +5,6 @@ export default defineEventHandler(async (event) => {
 	try {
 		const userId = event.context.user.id;
 		const data: budgetForm = await readBody(event);
-		console.log(data);
 
 		const createBudget = await db
 			.insert(budgetsTable)

@@ -27,7 +27,6 @@ export const useBudgetStore = defineStore("budget", {
 					console.warn("No budget data received");
 					return;
 				}
-				// console.log(data.value.data);
 				this.budgetData = data.value.data || {};
 				return data.value;
 			} catch (error) {
@@ -54,8 +53,6 @@ export const useBudgetStore = defineStore("budget", {
 					console.error("Failed to create budget:", error.value);
 					throw error.value;
 				}
-
-				console.log("Budget created:");
 				this.budgetData.push(data.value?.createdBudget);
 				return data.value;
 			} catch (error) {

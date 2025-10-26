@@ -14,18 +14,19 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
 	}
 
 	try {
-		const token = auth.token;
+		const token = useCookie("token");
 
 		const { data, error } = await useFetch("/api/auth/verify-token", {
 			method: "GET",
 			headers: {
-				Authorization: `Bearer ${token}`,
+				Authorization: `Bearer ${token.value}`,
 			},
 		});
 
 		if (error.value || !data.value?.isValid) {
 			auth.logout();
 		}
+		return;
 	} catch (err) {
 		console.error("Token verification failed:", err);
 		auth.logout();

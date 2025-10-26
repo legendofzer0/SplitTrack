@@ -118,7 +118,6 @@
 			if (participantsData.value?.participants) {
 				participants.value = participantsData.value.participants;
 			}
-			console.log(participants.value);
 		} catch (err: any) {
 			console.error("Error loading expense page:", err);
 			error.value =

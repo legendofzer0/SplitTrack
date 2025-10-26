@@ -22,10 +22,6 @@ export const useAuthStore = defineStore("auth", {
 				if (!data.value || !data.value.token) {
 					throw new Error("Token not received from server");
 				}
-				console.log("data");
-				console.log(data.value.token);
-				console.log("error");
-				console.log(error.value);
 				this.token = data.value.token;
 				this.isLoggedIn = true;
 				const tokenCookie = useCookie("token", {
@@ -33,7 +29,7 @@ export const useAuthStore = defineStore("auth", {
 					sameSite: "strict",
 				});
 				tokenCookie.value = data.value.token;
-				return true;	
+				return true;
 			} catch (err) {
 				console.error("Login error:", err);
 				throw err;

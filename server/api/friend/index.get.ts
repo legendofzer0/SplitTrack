@@ -4,10 +4,8 @@ import { friendsTable } from "~~/server/db/schemas";
 
 export default defineEventHandler(async (event) => {
 	try {
-		console.log(event.context);
 		const userId = event.context.user.id;
 		const status = getQuery(event);
-		console.log(status);
 		const getFriends = await db.select().from(friendsTable).where(
 			eq(friendsTable.userId, userId)
 			// &&
