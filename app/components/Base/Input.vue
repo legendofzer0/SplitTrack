@@ -3,7 +3,7 @@
 		<label
 			v-if="label"
 			:for="id"
-			class="block mb-1 text-sm font-medium text-gray-700 dark:text-gray-300"
+			class="block mb-1 text-sm font-medium text-gray-300"
 		>
 			{{ label }}
 			<span v-if="requiredData" class="text-sm font-bold text-red-600"
@@ -22,8 +22,8 @@
 				sizeClasses[size],
 				isInline ? 'blocked w-full' : 'blocked w-3xs md:w-3xl',
 				disabled
-					? 'bg-gray-100 dark:bg-gray-800 cursor-not-allowed opacity-60'
-					: 'bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500',
+					? 'bg-gray-800 cursor-not-allowed opacity-60'
+					: 'bg-gray-900 border-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500',
 			]"
 		/>
 
@@ -38,15 +38,12 @@
 				@click="togglePassword"
 				class="cursor-pointer"
 			/>
-			<label
-				for="showPassword"
-				class="text-sm text-gray-700 dark:text-gray-300"
-			>
+			<label for="showPassword" class="text-sm text-gray-300">
 				Show Password
 			</label>
 		</p>
 
-		<p v-if="error" class="mt-1 text-sm text-red-600 dark:text-red-400">
+		<p v-if="error" class="mt-1 text-sm text-red-400">
 			{{ error }}
 		</p>
 	</div>

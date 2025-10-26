@@ -10,8 +10,6 @@ export default defineEventHandler(async (event) => {
 		"/api/auth/verify-token",
 	];
 	const path = event.path;
-	console.log("path");
-	console.log(path);
 	if (!path.startsWith("/api")) {
 		return;
 	}
@@ -27,9 +25,7 @@ export default defineEventHandler(async (event) => {
 	}
 
 	try {
-		// console.log(authToken);
 		const decoded = verifyToken(authToken.replace("Bearer ", ""));
-		console.log(decoded);
 		if (decoded) {
 			event.context.user = decoded;
 		}

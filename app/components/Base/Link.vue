@@ -2,7 +2,7 @@
 	<NuxtLink
 		:to="to"
 		:class="[
-			'block dark rounded-md font-medium transition-colors duration-200',
+			'block rounded-md font-medium transition-colors duration-200',
 			sizeClasses[size],
 			variantClasses[variant],
 			isFull ? 'w-full text-center' : 'inline-block',
@@ -38,9 +38,9 @@
 	};
 
 	const variantClasses: Record<Variant, string> = {
-		default: "text-blue-600 hover:underline dark:text-blue-400",
-		nav: "text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700",
-		button: "bg-blue-600 text-white hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 rounded-lg",
+		default: "hover:underline text-blue-400",
+		nav: "text-white hover:bg-gray-100 hover:bg-gray-700",
+		button: "hover:bg-blue-700 bg-blue-500 hover:bg-blue-600 rounded-lg",
 		inline: "text-blue-500 underline m-0 p-0",
 	};
 </script>

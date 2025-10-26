@@ -1,19 +1,19 @@
 <template>
 	<div
-		class="bg-slate-100 dark:bg-slate-800 shadow-md rounded-2xl p-4 border border-gray-200 dark:border-slate-700 hover:shadow-lg transition m-5"
+		class="bg-slate-800 shadow-md rounded-2xl p-4 border border-slate-700 hover:shadow-lg transition m-5"
 		@click="navToDetail()"
 	>
 		<div class="flex justify-between items-start mb-2">
-			<h2 class="text-lg font-semibold text-gray-800 dark:text-gray-100">
+			<h2 class="text-lg font-semibold text-gray-100">
 				{{ expense.title }}
 			</h2>
-			<span class="text-sm text-gray-500 dark:text-gray-400">
+			<span class="text-sm text-gray-400">
 				{{ formattedDate }}
 			</span>
 		</div>
 
 		<p
-			class="text-gray-600 dark:text-gray-300 mb-3 whitespace-pre-line"
+			class="text-gray-300 mb-3 whitespace-pre-line"
 			:class="{ 'line-clamp-2': !showMore }"
 		>
 			{{ expense.description }}
@@ -29,18 +29,14 @@
 
 		<div class="flex justify-between items-center mt-3">
 			<div>
-				<p class="text-sm text-gray-500 dark:text-gray-400">
-					Split Type
-				</p>
-				<p
-					class="text-gray-700 dark:text-gray-200 font-medium capitalize"
-				>
+				<p class="text-sm text-gray-400">Split Type</p>
+				<p class="text-gray-200 font-medium capitalize">
 					{{ expense.splitType }}
 				</p>
 			</div>
 			<div class="text-right">
-				<p class="text-sm text-gray-500 dark:text-gray-400">Amount</p>
-				<p class="text-green-600 dark:text-green-400 font-bold text-xl">
+				<p class="text-sm text-gray-400">Amount</p>
+				<p class="text-green-400 font-bold text-xl">
 					NRS.
 					{{ Number(expense.amount).toFixed(2) }}
 				</p>

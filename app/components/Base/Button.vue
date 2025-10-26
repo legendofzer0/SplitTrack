@@ -25,13 +25,10 @@
 	};
 
 	const variantClasses: Record<Variant, string> = {
-		primary:
-			"bg-blue-600 text-white hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600",
-		secondary:
-			"bg-gray-200 text-gray-900 hover:bg-gray-300 dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600",
+		primary: " text-white bg-blue-500 hover:bg-blue-600",
+		secondary: " text-gray-900 bg-gray-700 text-white hover:bg-gray-600",
 		danger: "bg-red-600 text-white hover:bg-red-700",
-		success:
-			"bg-green-200 text-gray-900 hover:bg-green-300 dark:bg-green-700 dark:text-white dark:hover:bg-green-600",
+		success: "  bg-green-700 text-white hover:bg-green-600",
 	};
 </script>
 
