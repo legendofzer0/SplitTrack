@@ -22,9 +22,9 @@
 </template>
 
 <script setup lang="ts">
-	import { onMounted } from "vue";
 	import BudgetCard from "~/components/Budget/Card.vue";
 	import { useBudgetStore } from "~/store/useBudgetStrore";
 	const isOpen = ref(false);
 	const budget = useBudgetStore();
+	budget.getBudgets();
 </script>

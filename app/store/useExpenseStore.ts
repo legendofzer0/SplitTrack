@@ -7,6 +7,10 @@ export const useExpenseStore = defineStore("expense", {
 	}),
 
 	actions: {
+		async clean() {
+			this.expenseByUser = [];
+			this.expenseForUser = [];
+		},
 		async getExpenses() {
 			try {
 				const token = useCookie("token");

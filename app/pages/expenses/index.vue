@@ -11,6 +11,8 @@
 	import { useExpenseStore } from "~/store/useExpenseStore";
 
 	const expense = useExpenseStore();
+	expense.getExpenses();
+
 	const expByUser = expense.expenseByUser;
 	const expForUser = expense.expenseForUser;
 </script>

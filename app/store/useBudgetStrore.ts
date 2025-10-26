@@ -5,6 +5,9 @@ export const useBudgetStore = defineStore("budget", {
 		budgetData: [] as any[],
 	}),
 	actions: {
+		async clean() {
+			this.budgetData = [];
+		},
 		async getBudgets() {
 			try {
 				const token = useCookie("token");

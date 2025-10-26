@@ -1,6 +1,8 @@
 import type { Register } from "~/types/register";
 import { defineStore } from "pinia";
 import type { Login } from "~/types/login";
+import { useBudgetStore } from "./useBudgetStrore";
+import { useExpenseStore } from "./useExpenseStore";
 
 export const useAuthStore = defineStore("auth", {
 	state: () => ({
@@ -50,13 +52,16 @@ export const useAuthStore = defineStore("auth", {
 			return data.value;
 		},
 
-		logout() {
+		async logout() {
 			this.isLoggedIn = false;
 			this.token = "";
 
 			const tokenCookie = useCookie("token");
 			tokenCookie.value = null;
-
+			const budgetStore = useBudgetStore();
+			const expenseStore = useExpenseStore();
+			await budgetStore.clean();
+			await expenseStore.clean();
 			navigateTo("/");
 		},
 
