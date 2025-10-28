@@ -14,7 +14,20 @@
 					<BaseLink to="/dashboard"> Dashboard </BaseLink>
 					<BaseLink to="/expenses"> Expense </BaseLink>
 					<BaseLink to="/budget"> Budget </BaseLink>
-					<BaseLink to="/friends"> Friend </BaseLink>
+					<div class="relative group">
+						<BaseButton variant="plain"> Friends ▾ </BaseButton>
+
+						<div
+							class="absolute left-0 mt-2 w-48 bg-gray-900 border border-gray-700 rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-10"
+						>
+							<BaseLink :isFull="true" to="/friends">
+								My Friend
+							</BaseLink>
+							<BaseLink :isFull="true" to="/friends/requests">
+								Friend Requests
+							</BaseLink>
+						</div>
+					</div>
 
 					<BaseButton variant="danger" @click="auth.logout()"
 						>Logout</BaseButton
@@ -46,9 +59,22 @@
 				<BaseLink to="/budget" @click="isOpen = false" :isFull="true">
 					Budget
 				</BaseLink>
-				<BaseLink to="/friends" @click="isOpen = false" :isFull="true">
-					Friends
-				</BaseLink>
+				<div class="relative group">
+					<BaseButton variant="plain" :isFull="true">
+						Friends ▾
+					</BaseButton>
+
+					<div
+						class="absolute left-0 mt-2 w-full bg-gray-900 border border-gray-700 rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-10"
+					>
+						<BaseLink :isFull="true" to="/friends">
+							My Friend
+						</BaseLink>
+						<BaseLink :isFull="true" to="/friends/requests">
+							Friend Requests
+						</BaseLink>
+					</div>
+				</div>
 				<BaseButton
 					variant="danger"
 					@click="auth.logout()"

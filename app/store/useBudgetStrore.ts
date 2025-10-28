@@ -41,7 +41,7 @@ export const useBudgetStore = defineStore("budget", {
 			try {
 				const token = useCookie("token");
 
-				const { data, error } = await useFetch("/api/budget", {
+				const response = await $fetch("/api/budget", {
 					method: "POST",
 					headers: {
 						Authorization: token.value
@@ -51,15 +51,11 @@ export const useBudgetStore = defineStore("budget", {
 					},
 					body: payload,
 				});
-
-				if (error.value) {
-					console.error("Failed to create budget:", error.value);
-					throw error.value;
-				}
-				this.budgetData.push(data.value?.createdBudget);
-				return data.value;
+				this.budgetData.push(response.createdBudget[0]);
+				return true;
 			} catch (error) {
 				console.error("Error creating budget:", error);
+				return false;
 			}
 		},
 	},

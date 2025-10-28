@@ -42,7 +42,7 @@
 <script setup lang="ts">
 	import { useBudgetStore } from "~/store/useBudgetStrore";
 
-	interface BudgetPayload {	
+	interface BudgetPayload {
 		title: string;
 		totalAmount: number;
 		currency: string;
@@ -61,8 +61,9 @@
 		totalAmount: 0,
 		currency: "NRP",
 	});
+	const toast = useToast();
 
-	function addBudget() {
+	async function addBudget() {
 		errorData.title = "";
 		errorData.totalAmount = "";
 		errorData.currency = "";
@@ -82,6 +83,12 @@
 			errorData.totalAmount = "Amount should be greater than 10";
 			return;
 		}
-		budget.createBudgets(payload);
+		const isCreated = await budget.createBudgets(payload);
+
+		if (isCreated) {
+			toast.success({ message: "Budget Created Successfully" });
+		} else {
+			toast.error({ message: "Budget Was Not Created " });
+		}
 	}
 </script>

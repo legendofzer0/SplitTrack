@@ -1,4 +1,4 @@
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import { db } from "~~/server/db";
 import { friendsTable, usersTable } from "~~/server/db/schemas";
 
@@ -33,13 +33,17 @@ export default defineEventHandler(async (event) => {
 			.select()
 			.from(friendsTable)
 			.where(
-				eq(friendsTable.friendUserId, userData.id) &&
+				and(
+					eq(friendsTable.friendUserId, userData.id),
 					eq(friendsTable.userId, userId)
+				)
 			);
-		if (check) {
+		console.log(check.length);
+		if (check.length !== 0) {
 			return {
 				...userData,
 				isFriend: true,
+				status: check[0].status,
 			};
 		}
 		return {

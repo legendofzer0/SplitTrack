@@ -27,4 +27,5 @@
 	const isOpen = ref(false);
 	const budget = useBudgetStore();
 	budget.getBudgets();
+	console.log(budget.budgetData);
 </script>

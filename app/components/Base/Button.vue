@@ -1,6 +1,6 @@
 <script setup lang="ts">
 	type ButtonType = "button" | "submit" | "reset";
-	type Variant = "primary" | "secondary" | "danger" | "success";
+	type Variant = "primary" | "secondary" | "danger" | "success" | "plain";
 	type Size = "sm" | "md" | "lg";
 
 	const props = withDefaults(
@@ -29,6 +29,7 @@
 		secondary: " text-gray-900 bg-gray-700 text-white hover:bg-gray-600",
 		danger: "bg-red-600 text-white hover:bg-red-700",
 		success: "  bg-green-700 text-white hover:bg-green-600",
+		plain: "text-white",
 	};
 </script>
 

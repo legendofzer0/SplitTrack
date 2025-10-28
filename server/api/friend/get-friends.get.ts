@@ -1,10 +1,14 @@
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
+import { toDisplayString } from "vue";
 import { db } from "~~/server/db";
 import { friendsTable, usersTable } from "~~/server/db/schemas";
 
 export default defineEventHandler(async (event) => {
 	try {
 		const userId = event.context.user.id;
+		const query = getQuery(event);
+		const status = toDisplayString(query.status) || "pending";
+
 		const getFriendRequests = await db
 			.select({
 				friendsTable,
@@ -14,10 +18,13 @@ export default defineEventHandler(async (event) => {
 			})
 			.from(friendsTable)
 			.where(
-				eq(friendsTable.friendUserId, userId) &&
-					eq(friendsTable.status, "pending")
+				and(
+					eq(friendsTable.userId, userId),
+					eq(friendsTable.status, status)
+				)
 			)
-			.fullJoin(usersTable, eq(usersTable.id, friendsTable.userId));
+			.fullJoin(usersTable, eq(usersTable.id, friendsTable.friendUserId));
+
 		if (getFriendRequests.length > 0) {
 			setResponseStatus(event, 200, "Successfully found Friend requests");
 			return {

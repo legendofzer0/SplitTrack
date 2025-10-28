@@ -5,17 +5,23 @@
 			v-model="searchValue"
 			placeholder="Email Address"
 			:is-inline="false"
+			@keyup.enter="searchUser"
 		/>
 		<BaseButton @click="searchUser" variant="secondary" size="md">
 			Search
 		</BaseButton>
 	</div>
-	<FriendsCard :user-data="userData" />
+	<FriendsCard
+		:user-data="userData"
+		:email="searchValue"
+		@friend-added="friendAdded"
+	/>
 </template>
 
 <script setup lang="ts">
 	import { reactive, ref } from "vue";
 	import { useFetch, useCookie } from "#app";
+	import { emit } from "process";
 
 	interface User {
 		id: string;
@@ -37,40 +43,25 @@
 	}
 
 	async function searchUser() {
-		const token = useCookie("token");
+		try {
+			const token = useCookie("token");
 
-		const { data, error } = await useFetch<User[] | User>(
-			"/api/friend/get-user-data-email",
-			{
+			const response = await $fetch("/api/friend/get-user-data-email", {
 				method: "POST",
 				headers: {
 					Authorization: token.value ? `Bearer ${token.value}` : "",
 				},
 				body: { email: searchValue.value },
+			});
+			if (response) {
+				Object.assign(userData, { ...response });
 			}
-		);
-
-		if (error.value) {
-			console.error("Failed to fetch user:", error.value);
+		} catch (error) {
 			resetUserData();
-			return;
 		}
-
-		if (!data.value) {
-			console.warn("No user data received");
-			resetUserData();
-			return;
-		}
-
-		const user = Array.isArray(data.value)
-			? data.value[0]
-			: (data.value as User);
-
-		if (!user || !user.id) {
-			resetUserData();
-			return;
-		}
-
-		Object.assign(userData, user);
 	}
+	function friendAdded() {
+		emit("friend-added");
+	}
+	const emit = defineEmits(["friend-added"]);
 </script>

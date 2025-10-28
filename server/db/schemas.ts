@@ -40,6 +40,10 @@ export const budgetsTable = pgTable("budgets", {
 	userId: uuid("user_id").notNull(),
 	title: varchar("title", { length: 255 }).notNull(),
 	totalAmount: numeric("total_amount", { precision: 12, scale: 2 }).notNull(),
+	remainingAmount: numeric("remaining_amount", {
+		precision: 12,
+		scale: 2,
+	}).notNull(),
 	currency: varchar("currency", { length: 10 }).notNull().default("NPR"),
 	createdAt: timestamp("created_at").notNull().defaultNow(),
 });

@@ -1,7 +1,7 @@
 import { generateToken } from "~~/server/utils/JWT_Utility";
 import { friendsTable, invitationsTable } from "./../../db/schemas";
 import { db } from "~~/server/db";
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 
 export default defineEventHandler(async (event) => {
 	try {
@@ -14,15 +14,18 @@ export default defineEventHandler(async (event) => {
 		}
 
 		const token = generateToken(userId, request.email);
-
+		console.log(request);
 		const test = await db
 			.select()
 			.from(invitationsTable)
 			.where(
-				eq(invitationsTable.id, userId) &&
+				and(
+					eq(invitationsTable.id, userId),
 					eq(invitationsTable.inviteeEmail, request.email)
+				)
 			);
-		if (test) {
+
+		if (test.length !== 0) {
 			setResponseStatus(event, 400, "Invitation already exists");
 			return;
 		}
