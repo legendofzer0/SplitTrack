@@ -1,5 +1,5 @@
 {
-	"name": "SplitTrack",
+	"name": "split_track",
 	"type": "module",
 	"private": true,
 	"scripts": {
@@ -14,6 +14,7 @@
 	"dependencies": {
 		"@pinia/nuxt": "^0.11.2",
 		"@tailwindcss/vite": "^4.1.14",
+		"@vueuse/nuxt": "^14.0.0",
 		"bcrypt": "^6.0.0",
 		"jsonwebtoken": "^9.0.2",
 		"nuxt": "^4.1.3",

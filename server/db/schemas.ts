@@ -95,6 +95,9 @@ export const friendsTable = pgTable("friends", {
 	invitation_id: uuid("invitation_id").references(() => invitationsTable.id, {
 		onDelete: "set null",
 	}),
+	blockedBy: uuid("blocked_by").references(() => usersTable.id, {
+		onDelete: "cascade",
+	}),
 	status: varchar("status", { length: 50 }).default("pending"),
 });
 
@@ -119,5 +122,4 @@ export const invitationsTable = pgTable("invitations", {
 		.notNull()
 		.references(() => usersTable.email, { onDelete: "cascade" }),
 	token: varchar("token", { length: 255 }).notNull(),
-	status: varchar("status", { length: 50 }).default("pending"),
 });

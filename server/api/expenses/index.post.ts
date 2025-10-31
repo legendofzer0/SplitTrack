@@ -1,5 +1,10 @@
+import { eq, sql } from "drizzle-orm";
 import { db } from "~~/server/db";
-import { expenseParticipantsTable, expensesTable } from "~~/server/db/schemas";
+import {
+	budgetsTable,
+	expenseParticipantsTable,
+	expensesTable,
+} from "~~/server/db/schemas";
 
 export default defineEventHandler(async (event) => {
 	try {
@@ -31,20 +36,62 @@ export default defineEventHandler(async (event) => {
 
 		const expenseId = insertIntroExpenseTable[0].id;
 		var insertIntoExpenseParticipants;
-		if (data.split_type != SplitType.NONE) {
+		if (data.split_type !== SplitType.NONE) {
 			if (data.split_data) {
 				for (const [key, value] of Object.entries(data.split_data)) {
-					insertIntoExpenseParticipants = await db
+					const [expPar] = await db
 						.insert(expenseParticipantsTable)
 						.values({
-							expenseId: expenseId,
+							expenseId,
 							userId: key,
 							amountOwed: value.toString(),
 						})
-						.returning();
+						.returning({ id: expenseParticipantsTable.id });
+
+					if (key === userId) {
+						await db
+							.update(budgetsTable)
+							.set({
+								remainingAmount: sql`${budgetsTable.remainingAmount} - ${value}`,
+							})
+							.where(eq(budgetsTable.id, data.budget_id));
+
+						await db
+							.update(expenseParticipantsTable)
+							.set({
+								amountPaid: value.toString(),
+								status: "paid",
+							})
+							.where(eq(expenseParticipantsTable.id, expPar.id));
+					}
 				}
 			}
+		} else {
+			const [expPar] = await db
+				.insert(expenseParticipantsTable)
+				.values({
+					expenseId,
+					userId,
+					amountOwed: data.amount.toString(),
+				})
+				.returning({ id: expenseParticipantsTable.id });
+
+			await db
+				.update(budgetsTable)
+				.set({
+					remainingAmount: sql`${budgetsTable.remainingAmount} - ${data.amount}`,
+				})
+				.where(eq(budgetsTable.id, data.budget_id));
+
+			await db
+				.update(expenseParticipantsTable)
+				.set({
+					amountPaid: data.amount.toString(),
+					status: "paid",
+				})
+				.where(eq(expenseParticipantsTable.id, expPar.id));
 		}
+
 		setResponseStatus(event, 200, "Expense created successfully");
 		return {
 			message: "Expense created successfully",

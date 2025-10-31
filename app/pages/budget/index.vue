@@ -23,9 +23,8 @@
 
 <script setup lang="ts">
 	import BudgetCard from "~/components/Budget/Card.vue";
-	import { useBudgetStore } from "~/store/useBudgetStrore";
+	import { useBudgetStore } from "~/store/useBudgetStore";
 	const isOpen = ref(false);
 	const budget = useBudgetStore();
 	budget.getBudgets();
-	console.log(budget.budgetData);
 </script>

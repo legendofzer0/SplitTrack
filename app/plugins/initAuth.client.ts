@@ -1,5 +1,5 @@
 import { useAuthStore } from "~/store/useAuthStore";
-import { useBudgetStore } from "~/store/useBudgetStrore";
+import { useBudgetStore } from "~/store/useBudgetStore";
 import { useExpenseStore } from "~/store/useExpenseStore";
 
 export default defineNuxtPlugin(() => {

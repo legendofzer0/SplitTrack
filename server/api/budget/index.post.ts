@@ -13,6 +13,7 @@ export default defineEventHandler(async (event) => {
 				title: data.title,
 				totalAmount: data.totalAmount.toString(),
 				currency: data.currency,
+				remainingAmount: data.remainingAmount.toString(),
 			})
 			.returning();
 		setResponseStatus(event, 200, "Budget Created");
@@ -32,5 +33,6 @@ export default defineEventHandler(async (event) => {
 type budgetForm = {
 	title: string;
 	totalAmount: number;
+	remainingAmount: number;
 	currency?: string;
 };

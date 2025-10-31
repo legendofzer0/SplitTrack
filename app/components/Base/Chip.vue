@@ -25,8 +25,6 @@
 		}
 	);
 
-	console.log(props);
-
 	const variantClasses: Record<Variant, string> = {
 		primary: "bg-blue-600 text-white",
 		secondary: "bg-gray-700 text-gray-100",

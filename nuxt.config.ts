@@ -11,7 +11,7 @@ export default defineNuxtConfig({
 			},
 		},
 	},
-	modules: ["@pinia/nuxt", "nuxt-toast"],
+	modules: ["@pinia/nuxt", "nuxt-toast", "@vueuse/nuxt"],
 	css: ["~/assets/css/main.css"],
 	vite: {
 		plugins: [tailwindcss()],

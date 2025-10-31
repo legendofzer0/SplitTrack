@@ -1,0 +1,1 @@
+ALTER TABLE "budgets" ADD COLUMN "remaining_amount" numeric(12, 2) NOT NULL;

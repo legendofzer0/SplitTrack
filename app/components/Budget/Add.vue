@@ -40,7 +40,7 @@
 </template>
 
 <script setup lang="ts">
-	import { useBudgetStore } from "~/store/useBudgetStrore";
+	import { useBudgetStore } from "~/store/useBudgetStore";
 
 	interface BudgetPayload {
 		title: string;

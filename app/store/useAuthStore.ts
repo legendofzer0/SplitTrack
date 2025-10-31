@@ -1,7 +1,7 @@
 import type { Register } from "~/types/register";
 import { defineStore } from "pinia";
 import type { Login } from "~/types/login";
-import { useBudgetStore } from "./useBudgetStrore";
+import { useBudgetStore } from "./useBudgetStore";
 import { useExpenseStore } from "./useExpenseStore";
 
 export const useAuthStore = defineStore("auth", {

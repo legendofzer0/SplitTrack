@@ -15,7 +15,7 @@ export const useExpenseStore = defineStore("expense", {
 			try {
 				const token = useCookie("token");
 
-				const { data, error } = await useFetch("/api/expenses", {
+				const getExpenseData = await $fetch("/api/expenses", {
 					headers: {
 						Authorization: token.value
 							? `Bearer ${token.value}`
@@ -23,18 +23,15 @@ export const useExpenseStore = defineStore("expense", {
 					},
 				});
 
-				if (error.value) {
-					console.error("Failed to fetch expenses:", error.value);
-					throw error.value;
+				if (
+					getExpenseData.ExpensesByUser.length ||
+					getExpenseData.ExpensesForUser.length
+				) {
+					this.expenseByUser = [];
+					this.expenseForUser = [];
 				}
-
-				if (!data.value) {
-					console.warn("No expense data received");
-					return;
-				}
-
-				this.expenseByUser = data.value.ExpensesByUser ?? [];
-				this.expenseForUser = data.value.ExpensesForUser ?? [];
+				this.expenseByUser = getExpenseData.ExpensesByUser;
+				this.expenseForUser = getExpenseData.ExpensesForUser;
 			} catch (err) {
 				console.error("Error fetching expenses:", err);
 			}
@@ -50,7 +47,7 @@ export const useExpenseStore = defineStore("expense", {
 			try {
 				const token = useCookie("token");
 
-				const { data, error } = await useFetch(`/api/expenses/${id}`, {
+				const getExpenseFromID = await $fetch(`/api/expenses/${id}`, {
 					headers: {
 						Authorization: token.value
 							? `Bearer ${token.value}`
@@ -58,20 +55,7 @@ export const useExpenseStore = defineStore("expense", {
 					},
 				});
 
-				if (error.value) {
-					console.error("API fetch error:", error.value);
-					throw error.value;
-				}
-
-				if (!data.value) {
-					throw createError({
-						statusCode: 404,
-						statusMessage: "Expense not found",
-					});
-				}
-
-				const fetchedExpense = data.value;
-				return fetchedExpense;
+				console.log(getExpenseFromID);
 			} catch (err: any) {
 				if (err.statusCode === 404) {
 					console.warn("Expense not found:", id);
@@ -81,5 +65,36 @@ export const useExpenseStore = defineStore("expense", {
 				throw err;
 			}
 		},
+
+		async submit(formData: formDataStructure) {
+			const token = useCookie("token");
+			const submit = await $fetch("/api/expenses", {
+				method: "POST",
+				body: formData,
+				headers: {
+					Authorization: token.value ? `Bearer ${token.value}` : "",
+				},
+			});
+			console.log(submit);
+			const newExpense = submit.insertIntroExpenseTable?.[0];
+			if (newExpense) {
+				this.expenseByUser.push(newExpense);
+			} else {
+				console.warn("No new expense returned from API");
+			}
+
+			return true;
+		},
 	},
 });
+
+interface formDataStructure {
+	budget_id: string;
+	creator_id: string;
+	amount: number;
+	title: string;
+	description: string;
+	date: string;
+	split_type: string;
+	split_data: Object;
+}

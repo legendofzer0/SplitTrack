@@ -1,0 +1,2 @@
+ALTER TABLE "friends" ADD COLUMN "blocked_by" uuid;--> statement-breakpoint
+ALTER TABLE "friends" ADD CONSTRAINT "friends_blocked_by_users_id_fk" FOREIGN KEY ("blocked_by") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;

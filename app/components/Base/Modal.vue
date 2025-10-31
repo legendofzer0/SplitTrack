@@ -4,7 +4,7 @@
 		class="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
 	>
 		<div
-			class="bg-gray-900 text-white rounded-lg shadow-lg w-full max-w-lg p-4 relative"
+			class="bg-gray-900 text-white rounded-lg shadow-lg w-full items-center justify-center max-w-lg p-4 relative"
 		>
 			<div
 				class="flex justify-between items-center border-b border-gray-700 pb-2 mb-2"
