@@ -28,7 +28,12 @@
 		</div>
 	</div>
 	<div v-else>
-		{{ expense.expenseForUser }}
+		<div v-for="exp in expense.expenseForUser">
+			<ExpenseForUserCard
+				:expense="exp.expenses"
+				:participant="exp.expense_participants"
+			/>
+		</div>
 	</div>
 
 	<BaseModal :is-open="isOpen">

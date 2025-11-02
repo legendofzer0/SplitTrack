@@ -17,11 +17,15 @@ export default defineEventHandler(async (event) => {
 				eq(expenseParticipantsTable.expenseId, expensesTable.id)
 			)
 			.where(eq(expenseParticipantsTable.userId, userId));
+		const filteredExpensesForUser = getExpensesForUser.filter(
+			(expense) => expense.expenses.creatorId !== userId
+		);
+
 		setResponseStatus(event, 200, "Successfully got data");
 
 		return {
 			ExpensesByUser: getExpensesByCreator,
-			ExpensesForUser: getExpensesForUser,
+			ExpensesForUser: filteredExpensesForUser,
 		};
 	} catch (error) {
 		setResponseStatus(event, 500, "Internal Server Error");
