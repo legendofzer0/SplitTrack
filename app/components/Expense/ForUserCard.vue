@@ -37,6 +37,7 @@
 				<p class="text-green-400 font-bold text-xl">
 					NRS. {{ Number(expense.amount).toFixed(2) }}
 				</p>
+
 				<p class="text-sm text-gray-400">Paid</p>
 				<p class="text-blue-400 font-semibold">
 					NRS. {{ Number(participant.amountPaid).toFixed(2) }}
