@@ -5,6 +5,7 @@ import {
 	expenseParticipantsTable,
 	expensesTable,
 } from "~~/server/db/schemas";
+import { uploadReceipt } from "~~/server/utils/uploadReceipts";
 
 export default defineEventHandler(async (event) => {
 	try {
@@ -92,6 +93,11 @@ export default defineEventHandler(async (event) => {
 				.where(eq(expenseParticipantsTable.id, expPar.id));
 		}
 
+		if (data.addFile && data.file) {
+			const storedFiles = await uploadReceipt(data.file);
+			console.log(storedFiles);
+		}
+
 		setResponseStatus(event, 200, "Expense created successfully");
 		return {
 			message: "Expense created successfully",
@@ -116,6 +122,8 @@ type ExpensePost = {
 	date?: Date;
 	split_type: SplitType;
 	split_data?: Record<string, number>;
+	addFile: boolean;
+	file: any;
 };
 
 enum SplitType {

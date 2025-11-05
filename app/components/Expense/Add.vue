@@ -82,6 +82,21 @@
 			</div>
 		</div>
 
+		<div class="mt-4">
+			<input type="checkbox" v-model="addReceipt" id="addReceipt" />
+			<label for="addReceipt" class="p-2 text-white">Add Receipt</label>
+		</div>
+
+		<div v-if="addReceipt" class="mt-4">
+			<label class="text-white">Upload Receipt:</label>
+			<input
+				type="file"
+				@change="handleFileChange"
+				multiple
+				class="block mt-2 text-white"
+			/>
+		</div>
+
 		<BaseButton type="submit" class="mt-4">Submit</BaseButton>
 	</form>
 </template>
@@ -89,6 +104,9 @@
 <script setup lang="ts">
 	import { ref, reactive, onMounted, watch } from "vue";
 	import { useExpenseStore } from "~/store/useExpenseStore";
+
+	const addReceipt = ref(false);
+	const receiptFiles = ref<File[]>([]);
 
 	interface UserType {
 		id: string;
@@ -114,6 +132,8 @@
 		date: "",
 		split_type: "none",
 		split_data: {},
+		addFile: false,
+		file: [] as any[],
 	});
 
 	const budgetData = ref<{ id: string; title: string }[]>([]);
@@ -154,7 +174,6 @@
 			);
 
 			formData.creator_id = creatorData.data.id;
-
 			selected.value[creatorData.data.id] = "Me";
 			splitData.value[creatorData.data.id] = 0;
 		} catch (err) {
@@ -169,14 +188,19 @@
 		};
 	}
 
+	function handleFileChange(event: Event) {
+		const target = event.target as HTMLInputElement;
+		if (target.files) {
+			receiptFiles.value = Array.from(target.files);
+		}
+	}
+
 	async function getBudgetData(amount: number) {
 		try {
 			const budgetRes = await $fetch(
 				"/api/budget/get-with-remaining-amount",
 				{
-					query: {
-						amount,
-					},
+					query: { amount },
 					method: "GET",
 					headers: {
 						Authorization: token.value
@@ -212,9 +236,10 @@
 		},
 		{ deep: true, immediate: true }
 	);
+
 	watch(
 		() => formData.amount,
-		async (newAmount, oldAmount) => {
+		async (newAmount) => {
 			await getBudgetData(newAmount);
 		}
 	);
@@ -235,8 +260,7 @@
 		errorList.type = "";
 		errorList.data = "";
 
-		let today = new Date();
-		formData.date = today.toLocaleDateString();
+		formData.date = new Date().toLocaleDateString();
 		formData.split_data = splitData.value;
 		formData.budget_id = selectedBudget.value?.id || "";
 
@@ -256,7 +280,6 @@
 			(acc: number, val) => acc + Number(val),
 			0
 		);
-
 		if (
 			totalSplit !== Number(formData.amount) &&
 			formData.split_type != "none"
@@ -266,17 +289,37 @@
 			return;
 		}
 
+		if (addReceipt.value && receiptFiles.value.length > 0) {
+			const fileDataPromises = receiptFiles.value.map(async (file) => {
+				const arrayBuffer = await file.arrayBuffer();
+				const base64 = btoa(
+					new Uint8Array(arrayBuffer).reduce(
+						(data, byte) => data + String.fromCharCode(byte),
+						""
+					)
+				);
+				return {
+					name: file.name,
+					type: file.type,
+					data: `data:${file.type};base64,${base64}`,
+				};
+			});
+			formData.file = await Promise.all(fileDataPromises);
+			formData.addFile = true;
+		} else {
+			formData.addFile = false;
+			formData.file = [];
+		}
+
 		try {
 			const toast = useToast();
 			const expense = useExpenseStore();
-
 			const isCreated = await expense.submit(formData);
 
-			if (isCreated) {
-				toast.success({ message: "Budget Created Successfully" });
-			} else {
-				toast.error({ message: "Budget Was Not Created " });
-			}
+			if (isCreated)
+				toast.success({ message: "Expense Created Successfully" });
+			else toast.error({ message: "Expense Was Not Created" });
+
 			emit("submitted:expense");
 		} catch (error) {
 			console.log(error);

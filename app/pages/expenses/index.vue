@@ -46,7 +46,9 @@
 		</template>
 
 		<template #body>
-			<ExpenseAdd @submitted:expense="submitted" />
+			<div class="h-l overflow-auto">
+				<ExpenseAdd @submitted:expense="submitted" />
+			</div>
 		</template>
 		<template #footer>
 			<BaseButton variant="danger" @click="isOpen = false">
