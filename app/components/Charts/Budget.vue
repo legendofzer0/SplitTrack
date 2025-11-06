@@ -1,5 +1,7 @@
 <template>
-	<highchart :options="options" />
+	<div class="card p-3 bg-gray-900 rounded-lg">
+		<highchart :options="options" />
+	</div>
 </template>
 
 <script setup lang="ts">
@@ -41,7 +43,7 @@
 	const options = computed<Options>(() => ({
 		chart: {
 			type: "column",
-			backgroundColor: "#1e1e1e",
+			backgroundColor: "#0f1720",
 			style: { color: "#fff" },
 		},
 
@@ -109,3 +111,19 @@
 		],
 	}));
 </script>
+
+<style scoped>
+	.card {
+		background: #0b1220;
+		border: 1px solid #1f2937;
+		color: #e5e7eb;
+	}
+</style>
+
+<style scoped>
+	.card {
+		background: #0b1220;
+		border: 1px solid #1f2937;
+		color: #e5e7eb;
+	}
+</style>
