@@ -25,20 +25,30 @@
 
 	const token = useCookie("token");
 
-	const budgetResponse = await $fetch<BudgetResponse>("/api/budget", {
-		headers: {
-			Authorization: token.value ? `Bearer ${token.value}` : "",
-		},
-	});
+	let budgetData: Budget[] = [];
 
-	const budgetData = budgetResponse.data ?? [];
+	try {
+		const res = await $fetch<BudgetResponse>("/api/budget", {
+			headers: {
+				Authorization: token.value ? `Bearer ${token.value}` : "",
+			},
+		});
 
-	const formattedData = budgetData.map((b: Budget) => ({
-		title: b.title,
-		totalAmount: parseFloat(b.totalAmount),
-		remainingAmount: parseFloat(b.remainingAmount),
-		usedAmount: parseFloat(b.totalAmount) - parseFloat(b.remainingAmount),
-	}));
+		budgetData = res?.data ?? [];
+	} catch (error) {
+		console.error("Failed to fetch budget data:", error);
+		budgetData = [];
+	}
+
+	const formattedData = budgetData
+		.filter((b) => parseFloat(b.remainingAmount) > 0)
+		.map((b: Budget) => ({
+			title: b.title,
+			totalAmount: parseFloat(b.totalAmount),
+			remainingAmount: parseFloat(b.remainingAmount),
+			usedAmount:
+				parseFloat(b.totalAmount) - parseFloat(b.remainingAmount),
+		}));
 
 	const options = computed<Options>(() => ({
 		chart: {

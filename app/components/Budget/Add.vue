@@ -20,14 +20,6 @@
 				:required-data="true"
 			/>
 
-			<BaseInput
-				id="budget-currency"
-				label="Currency:"
-				v-model="payload.currency"
-				type="text"
-				:error="errorData.currency"
-				:required-data="true"
-			/>
 			<BaseButton
 				variant="success"
 				size="lg"

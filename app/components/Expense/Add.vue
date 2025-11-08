@@ -224,12 +224,16 @@
 			}
 
 			if (splitType === "equal" && amount > 0) {
+				const keys = Object.keys(newSelected);
 				const perUser = +(amount / keys.length).toFixed(2);
+
 				keys.forEach((k) => (splitData.value[k] = perUser));
-			} else if (splitType === "custom") {
-				keys.forEach((k) => {
-					if (!(k in splitData.value)) splitData.value[k] = 0;
-				});
+
+				const total = keys
+					.slice(0, -1)
+					.reduce((acc, k) => acc + splitData.value[k], 0);
+				const lastKey = keys[keys.length - 1];
+				splitData.value[lastKey] = +(amount - total).toFixed(2);
 			}
 		},
 		{ deep: true, immediate: true }
