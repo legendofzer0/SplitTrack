@@ -50,7 +50,11 @@
 			class="md:hidden bg-gray-800 border-t border-gray-700"
 		>
 			<div class="px-2 pt-2 pb-3 space-y-1">
-				<BaseLink to="/" @click="isOpen = false" :isFull="true">
+				<BaseLink
+					to="/dashboard"
+					@click="isOpen = false"
+					:isFull="true"
+				>
 					Dashboard
 				</BaseLink>
 				<BaseLink to="/Expenses" @click="isOpen = false" :isFull="true">
@@ -59,18 +63,34 @@
 				<BaseLink to="/budget" @click="isOpen = false" :isFull="true">
 					Budget
 				</BaseLink>
-				<div class="relative group">
-					<BaseButton variant="plain" :isFull="true">
+				<div class="relative">
+					<BaseButton
+						variant="plain"
+						:isFull="true"
+						@click="toggleDropdown"
+					>
 						Friends ▾
 					</BaseButton>
 
 					<div
-						class="absolute left-0 mt-2 w-full bg-gray-900 border border-gray-700 rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-10"
+						class="absolute left-0 mt-2 w-full bg-gray-900 border border-gray-700 rounded-md shadow-lg z-10 transition-all duration-200"
+						:class="{
+							'opacity-100 visible': isToggleOpen,
+							'opacity-0 invisible': !isToggleOpen,
+						}"
 					>
-						<BaseLink :isFull="true" to="/friends">
+						<BaseLink
+							:isFull="true"
+							to="/friends"
+							@click="isToggleOpen = false"
+						>
 							My Friend
 						</BaseLink>
-						<BaseLink :isFull="true" to="/friends/requests">
+						<BaseLink
+							:isFull="true"
+							to="/friends/requests"
+							@click="isToggleOpen = false"
+						>
 							Friend Requests
 						</BaseLink>
 					</div>
@@ -90,5 +110,10 @@
 	import { ref } from "vue";
 	import { useAuthStore } from "~/store/useAuthStore";
 	const isOpen = ref(false);
+	const isToggleOpen = ref(false);
+	function toggleDropdown() {
+		isToggleOpen.value = !isToggleOpen.value;
+	}
+
 	const auth = useAuthStore();
 </script>
