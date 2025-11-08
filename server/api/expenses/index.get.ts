@@ -1,4 +1,4 @@
-import { eq } from "drizzle-orm";
+import { desc, eq } from "drizzle-orm";
 import { db } from "~~/server/db";
 import { expenseParticipantsTable, expensesTable } from "~~/server/db/schemas";
 
@@ -8,15 +8,18 @@ export default defineEventHandler(async (event) => {
 		const getExpensesByCreator = await db
 			.select()
 			.from(expensesTable)
-			.where(eq(expensesTable.creatorId, userId));
+			.where(eq(expensesTable.creatorId, userId))
+			.orderBy(desc(expensesTable.createdAt));
 		const getExpensesForUser = await db
 			.select()
 			.from(expenseParticipantsTable)
+
 			.innerJoin(
 				expensesTable,
 				eq(expenseParticipantsTable.expenseId, expensesTable.id)
 			)
-			.where(eq(expenseParticipantsTable.userId, userId));
+			.where(eq(expenseParticipantsTable.userId, userId))
+			.orderBy(desc(expensesTable.createdAt));
 		const filteredExpensesForUser = getExpensesForUser.filter(
 			(expense) => expense.expenses.creatorId !== userId
 		);

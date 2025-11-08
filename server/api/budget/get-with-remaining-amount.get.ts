@@ -6,7 +6,6 @@ export default defineEventHandler(async (event) => {
 	try {
 		const userId = event.context.user.id;
 		const query = getQuery(event);
-		console.log(query);
 		const amount = query.amount || 0;
 		const getBudgets = await db
 			.select()

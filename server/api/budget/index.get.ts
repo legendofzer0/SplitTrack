@@ -1,4 +1,4 @@
-import { eq } from "drizzle-orm";
+import { desc, eq } from "drizzle-orm";
 import { db } from "~~/server/db";
 import { budgetsTable } from "~~/server/db/schemas";
 
@@ -8,7 +8,8 @@ export default defineEventHandler(async (event) => {
 		const getBudgets = await db
 			.select()
 			.from(budgetsTable)
-			.where(eq(budgetsTable.userId, userId));
+			.where(eq(budgetsTable.userId, userId))
+			.orderBy(desc(budgetsTable.createdAt));
 		if (getBudgets.length !== 0) {
 			setResponseStatus(event, 200, "Budget found");
 			return {

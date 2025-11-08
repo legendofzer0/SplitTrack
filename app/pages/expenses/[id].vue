@@ -62,6 +62,9 @@
 					</li>
 				</ul>
 			</div>
+			<div v-if="fileName">
+				<img :src="`/api/files${fileName}`" alt="Image" />
+			</div>
 		</div>
 	</div>
 </template>
@@ -79,7 +82,7 @@
 	const error = ref<string | null>(null);
 	const budgetName = ref<string | null>(null);
 	const participants = ref<any[]>([]);
-
+	const fileName = ref();
 	const token = useCookie("token");
 
 	onMounted(async () => {
@@ -118,6 +121,16 @@
 			if (participantsData.value?.participants) {
 				participants.value = participantsData.value.participants;
 			}
+
+			const receipt = await $fetch("/api/receipts", {
+				query: {
+					expenseId: expense.value.id,
+				},
+				headers: {
+					Authorization: token.value ? `Bearer ${token.value}` : "",
+				},
+			});
+			fileName.value = receipt?.fileUrl;
 		} catch (err: any) {
 			console.error("Error loading expense page:", err);
 			error.value =

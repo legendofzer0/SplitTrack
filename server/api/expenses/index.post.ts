@@ -1,11 +1,11 @@
 import { eq, sql } from "drizzle-orm";
+import { ServerFile } from "nuxt-file-storage";
 import { db } from "~~/server/db";
 import {
 	budgetsTable,
 	expenseParticipantsTable,
 	expensesTable,
 } from "~~/server/db/schemas";
-import { uploadReceipt } from "~~/server/utils/uploadReceipts";
 
 export default defineEventHandler(async (event) => {
 	try {
@@ -93,8 +93,14 @@ export default defineEventHandler(async (event) => {
 				.where(eq(expenseParticipantsTable.id, expPar.id));
 		}
 
+		console.log(data.addFile);
+		console.log(data.file);
 		if (data.addFile && data.file) {
-			const storedFiles = await uploadReceipt(data.file);
+			const storedFiles = await uploadReceipts(
+				data.file[0],
+				expenseId,
+				userId
+			);
 			console.log(storedFiles);
 		}
 
@@ -123,7 +129,7 @@ type ExpensePost = {
 	split_type: SplitType;
 	split_data?: Record<string, number>;
 	addFile: boolean;
-	file: any;
+	file: ServerFile[];
 };
 
 enum SplitType {

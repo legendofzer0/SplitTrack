@@ -1,34 +1,26 @@
-import { storeFileLocally } from "#imports";
+import { ServerFile } from "nuxt-file-storage";
+import { db } from "../db";
+import { receiptsTable } from "../db/schemas";
 
-export async function uploadReceipt(
-	form: { name: string; filename?: string; data: string; type?: string }[]
+export async function uploadReceipts(
+	file: ServerFile,
+	expense_id: string,
+	user_id: string
 ) {
-	if (!form || form.length === 0) {
-		throw createError({
-			statusCode: 400,
-			statusMessage: "No files uploaded",
-		});
+	try {
+		const filename = await storeFileLocally(file, 8, "/receipt");
+
+		if (filename) {
+			const addToReceiptDb = await db.insert(receiptsTable).values({
+				fileUrl: "/receipt/" + filename,
+				expenseId: expense_id,
+				mime: file.type,
+				uploadedBy: user_id,
+			});
+
+			return addToReceiptDb;
+		}
+	} catch (error) {
+		console.log(error);
 	}
-
-	const storedFiles: string[] = [];
-
-	for (const field of form) {
-		if (!field.filename) continue;
-
-		const filename = await storeFileLocally(
-			{
-				name: field.filename,
-				data: field.data,
-				type: field.type || "",
-			},
-			8,
-			"/receipts"
-		);
-
-		storedFiles.push(filename);
-	}
-
-	return {
-		files: storedFiles,
-	};
 }

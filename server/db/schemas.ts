@@ -108,7 +108,9 @@ export const receiptsTable = pgTable("receipts", {
 		.references(() => expensesTable.id, { onDelete: "cascade" }),
 	fileUrl: text("file_url").notNull(),
 	mime: varchar("mime", { length: 100 }).notNull(),
-	uploadedBy: uuid("uploaded_by").notNull(),
+	uploadedBy: uuid("uploaded_by")
+		.notNull()
+		.references(() => usersTable.id, { onDelete: "cascade" }),
 	createdAt: timestamp("created_at").notNull().defaultNow(),
 });
 export const invitationsTable = pgTable("invitations", {

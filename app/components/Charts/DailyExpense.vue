@@ -3,10 +3,12 @@
 		<highchart :options="dailyExpenseOptions" />
 	</div>
 </template>
+
 <script setup lang="ts">
 	import { type ExpensesApiResponse } from "~/types/expense";
 	import { computed } from "vue";
 	import type { Options, TooltipFormatterContextObject } from "highcharts";
+	import { toNum } from "#imports";
 
 	const token = useCookie("token");
 	const expenseResponse = await $fetch<ExpensesApiResponse>("/api/expenses", {
@@ -14,30 +16,36 @@
 			Authorization: token.value ? `Bearer ${token.value}` : "",
 		},
 	});
-	function toNum(n: string | number | undefined): number {
-		if (n === undefined || n === null) return 0;
-		const parsed = typeof n === "number" ? n : parseFloat(String(n));
-		return Number.isFinite(parsed) ? parsed : 0;
-	}
 
 	const dailyTotals = computed(() => {
 		const map = new Map<string, number>();
+		const now = new Date();
+		const sevenDaysAgo = new Date();
+		sevenDaysAgo.setDate(now.getDate() - 7);
+
 		for (const e of expenseResponse.ExpensesByUser ?? []) {
-			const date = e.date || e.createdAt?.slice(0, 10) || "unknown";
-			const amount = toNum(e.amount);
-			map.set(date, (map.get(date) || 0) + amount);
+			const dateStr = e.date || e.createdAt?.slice(0, 10);
+			if (!dateStr) continue;
+
+			const date = new Date(dateStr);
+			if (date >= sevenDaysAgo && date <= now) {
+				const amount = toNum(e.amount);
+				map.set(dateStr, (map.get(dateStr) || 0) + amount);
+			}
 		}
+
 		return Array.from(map.entries())
 			.map(([date, total]) => ({ date, total }))
 			.sort((a, b) => (a.date < b.date ? -1 : a.date > b.date ? 1 : 0));
 	});
+
 	const dailyExpenseOptions = computed<Options>(() => ({
 		chart: {
 			type: "column",
 			backgroundColor: "#0f1720",
 			style: { color: "#f5f5f5" },
 		},
-		title: { text: "Daily Spending", style: { color: "#fff" } },
+		title: { text: "Last 7 Days Spending", style: { color: "#fff" } },
 		xAxis: {
 			categories: dailyTotals.value.map((d) => d.date),
 			labels: { style: { color: "#f5f5f5" } },

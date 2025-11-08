@@ -8,11 +8,14 @@ export default defineEventHandler(async (event) => {
 		"/api/auth/login",
 		"/api/auth/register",
 		"/api/auth/verify-token",
+		"/api/auth/verify-token",
 	];
 	const path = event.path;
 	if (!path.startsWith("/api")) {
 		return;
 	}
+	if (path.startsWith("/api/files")) return;
+
 	if (allowedURIs.includes(path)) {
 		return;
 	}

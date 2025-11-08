@@ -88,12 +88,12 @@
 		</div>
 
 		<div v-if="addReceipt" class="mt-4">
-			<label class="text-white">Upload Receipt:</label>
+			<label class="text-white">Upload Receipt:</label> <br />
 			<input
+				accept="image/*"
 				type="file"
-				@change="handleFileChange"
-				multiple
-				class="block mt-2 text-white"
+				@input="handleFileInput"
+				class="block w-full text-sm text-gray-300 file:mr-2 file:py-1 file:px-2 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-green-600 file:text-white hover:file:bg-green-700 focus:outline-none"
 			/>
 		</div>
 
@@ -102,11 +102,12 @@
 </template>
 
 <script setup lang="ts">
+	const { handleFileInput, files } = useFileStorage();
+
 	import { ref, reactive, onMounted, watch } from "vue";
 	import { useExpenseStore } from "~/store/useExpenseStore";
 
 	const addReceipt = ref(false);
-	const receiptFiles = ref<File[]>([]);
 
 	interface UserType {
 		id: string;
@@ -188,13 +189,6 @@
 		};
 	}
 
-	function handleFileChange(event: Event) {
-		const target = event.target as HTMLInputElement;
-		if (target.files) {
-			receiptFiles.value = Array.from(target.files);
-		}
-	}
-
 	async function getBudgetData(amount: number) {
 		try {
 			const budgetRes = await $fetch(
@@ -214,6 +208,10 @@
 			budgetData.value = [];
 		}
 	}
+
+	watch(addReceipt, (newVal) => {
+		formData.addFile = newVal;
+	});
 
 	watch(
 		[selected, () => formData.split_type, () => formData.amount],
@@ -289,26 +287,8 @@
 			return;
 		}
 
-		if (addReceipt.value && receiptFiles.value.length > 0) {
-			const fileDataPromises = receiptFiles.value.map(async (file) => {
-				const arrayBuffer = await file.arrayBuffer();
-				const base64 = btoa(
-					new Uint8Array(arrayBuffer).reduce(
-						(data, byte) => data + String.fromCharCode(byte),
-						""
-					)
-				);
-				return {
-					name: file.name,
-					type: file.type,
-					data: `data:${file.type};base64,${base64}`,
-				};
-			});
-			formData.file = await Promise.all(fileDataPromises);
-			formData.addFile = true;
-		} else {
-			formData.addFile = false;
-			formData.file = [];
+		if (formData.addFile) {
+			formData.file = files.value;
 		}
 
 		try {

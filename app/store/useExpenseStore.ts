@@ -68,6 +68,7 @@ export const useExpenseStore = defineStore("expense", {
 
 		async submit(formData: formDataStructure) {
 			const token = useCookie("token");
+			console.log(formData);
 			const submit = await $fetch("/api/expenses", {
 				method: "POST",
 				body: formData,
@@ -75,7 +76,6 @@ export const useExpenseStore = defineStore("expense", {
 					Authorization: token.value ? `Bearer ${token.value}` : "",
 				},
 			});
-			console.log(submit);
 			const newExpense = submit.insertIntroExpenseTable?.[0];
 			if (newExpense) {
 				this.expenseByUser.push(newExpense);

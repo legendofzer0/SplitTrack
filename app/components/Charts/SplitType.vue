@@ -7,6 +7,7 @@
 <script setup lang="ts">
 	import { computed } from "vue";
 	import type { Options } from "highcharts";
+	import { toNum } from "#imports";
 
 	import { type ExpensesApiResponse } from "~/types/expense";
 
@@ -16,12 +17,6 @@
 			Authorization: token.value ? `Bearer ${token.value}` : "",
 		},
 	});
-
-	function toNum(n: string | number | undefined): number {
-		if (n === undefined || n === null) return 0;
-		const parsed = typeof n === "number" ? n : parseFloat(String(n));
-		return Number.isFinite(parsed) ? parsed : 0;
-	}
 
 	const splitTypeDistribution = computed(() => {
 		const totals = new Map<string, number>();
