@@ -8,6 +8,13 @@ export async function uploadReceipts(
 	user_id: string
 ) {
 	try {
+		const imageRegex = /^image\//;
+
+		if (!imageRegex.test(file.type)) {
+			console.warn("Skipping non-image file:", file.type);
+			return;
+		}
+
 		const filename = await storeFileLocally(file, 8, "/receipt");
 
 		if (filename) {

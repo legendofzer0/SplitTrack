@@ -1,0 +1,2 @@
+ALTER TABLE "users" ADD COLUMN "is_default_avatar" boolean DEFAULT true NOT NULL;--> statement-breakpoint
+ALTER TABLE "receipts" ADD CONSTRAINT "receipts_uploaded_by_users_id_fk" FOREIGN KEY ("uploaded_by") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;

@@ -93,15 +93,12 @@ export default defineEventHandler(async (event) => {
 				.where(eq(expenseParticipantsTable.id, expPar.id));
 		}
 
-		console.log(data.addFile);
-		console.log(data.file);
 		if (data.addFile && data.file) {
 			const storedFiles = await uploadReceipts(
 				data.file[0],
 				expenseId,
 				userId
 			);
-			console.log(storedFiles);
 		}
 
 		setResponseStatus(event, 200, "Expense created successfully");

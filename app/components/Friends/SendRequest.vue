@@ -21,13 +21,13 @@
 <script setup lang="ts">
 	import { reactive, ref } from "vue";
 	import { useFetch, useCookie } from "#app";
-	import { emit } from "process";
 
 	interface User {
 		id: string;
 		name: string;
 		avatar: string;
 		isFriend: boolean;
+		is_default: boolean;
 	}
 
 	const searchValue = ref("");
@@ -36,6 +36,7 @@
 		name: "",
 		avatar: "",
 		isFriend: false,
+		is_default: true,
 	});
 
 	function resetUserData() {

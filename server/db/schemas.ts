@@ -1,4 +1,5 @@
 import { sql } from "drizzle-orm";
+import { boolean } from "drizzle-orm/gel-core";
 import {
 	pgTable,
 	uniqueIndex,
@@ -26,6 +27,7 @@ export const usersTable = pgTable(
 		password: varchar("password", { length: 225 }).notNull(),
 		phone_number: varchar("phone_number", { length: 10 }).notNull(),
 		avatar: text("avatar_url").notNull().default("default_avatar.png"),
+		is_default_avatar: boolean("is_default_avatar").notNull().default(true),
 		createdAt: timestamp("created_at").notNull().defaultNow(),
 	},
 	(table) => {

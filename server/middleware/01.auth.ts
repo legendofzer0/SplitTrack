@@ -15,6 +15,7 @@ export default defineEventHandler(async (event) => {
 		return;
 	}
 	if (path.startsWith("/api/files")) return;
+	if (path.startsWith("/api/avatar")) return;
 
 	if (allowedURIs.includes(path)) {
 		return;

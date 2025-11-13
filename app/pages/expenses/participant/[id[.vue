@@ -29,7 +29,11 @@
 			>
 				<div class="flex items-center space-x-3">
 					<img
-						:src="`/${p.users.avatar}`"
+						:src="
+							p.users.avatar
+								? `/${p.users.avatar}`
+								: '/default_avatar.png'
+						"
 						alt="avatar"
 						class="w-10 h-10 rounded-full object-cover border border-gray-500"
 					/>
@@ -78,6 +82,14 @@
 				</span>
 			</p>
 		</div>
+
+		<div v-if="fileName" class="mt-4">
+			<img
+				:src="`/api/files/${fileName}`"
+				alt="Receipt Image"
+				class="rounded-xl border border-gray-700"
+			/>
+		</div>
 	</div>
 
 	<div v-else class="text-center text-gray-400 mt-6">Loading expense...</div>
@@ -102,9 +114,14 @@
 
 <script setup lang="ts">
 	import { ref, computed, reactive, onMounted, watch } from "vue";
-	import { useRoute, useCookie } from "#imports";
+	import { useRoute, useCookie, navigateTo } from "#imports";
+
+	const token = useCookie("token");
+	const route = useRoute();
+	const id = route.params.id as string;
 
 	const isOpen = ref(false);
+	const fileName = ref<string | null>(null);
 
 	interface User {
 		userId: string;
@@ -139,13 +156,10 @@
 		users: User;
 	}
 
-	const route = useRoute();
-	const id = route.params.id as string;
 	const data = ref<ExpenseData[] | null>(null);
+	const userId = ref("");
 
-	const expense = computed(() =>
-		data.value ? data.value[0].expensesTable : null
-	);
+	const expense = computed(() => data.value?.[0]?.expensesTable ?? null);
 	const participants = computed(() => data.value || []);
 
 	const remainingAmount = computed(() =>
@@ -162,8 +176,6 @@
 
 	const formatDate = (date?: string) =>
 		date ? new Date(date).toLocaleDateString() : "";
-
-	const userId = ref("");
 
 	const formData = reactive({
 		title: "",
@@ -192,8 +204,6 @@
 	};
 
 	onMounted(async () => {
-		const token = useCookie("token");
-
 		const getData = await $fetch<ExpenseData[]>(
 			"/api/expenses/participants-exp-details",
 			{
@@ -205,6 +215,18 @@
 			}
 		);
 
+		data.value = getData;
+
+		if (data.value && data.value[0]?.expensesTable) {
+			const receipt = await $fetch("/api/receipts", {
+				query: { expenseId: data.value[0].expensesTable.id },
+				headers: {
+					Authorization: token.value ? `Bearer ${token.value}` : "",
+				},
+			});
+			fileName.value = receipt?.fileUrl || null;
+		}
+
 		const user = await $fetch("/api/auth/verify-token", {
 			headers: {
 				Authorization: token.value ? `Bearer ${token.value}` : "",
@@ -212,10 +234,7 @@
 		});
 
 		if (user?.data) userId.value = user.data.id;
-
-		data.value = getData;
 	});
-
 	function paid() {
 		isOpen.value = false;
 		navigateTo("/expenses");

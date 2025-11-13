@@ -3,10 +3,9 @@
 		v-if="userData.id"
 		class="mt-4 p-4 w-sm rounded-lg shadow-sm bg-slate-700 flex items-center space-x-4"
 	>
-		<img
-			:src="userData.avatar"
-			alt="User avatar"
-			class="w-12 h-12 rounded-full object-cover border"
+		<FriendsImage
+			:is_default="userData.is_default"
+			:avatar="userData.avatar"
 		/>
 		<div>
 			<p class="font-semibold text-white">{{ userData.name }}</p>
@@ -42,6 +41,7 @@
 		name: string;
 		avatar: string;
 		isFriend: boolean;
+		is_default: boolean;
 		status?: string;
 	}
 	const props = defineProps<{ userData: User; email: string }>();

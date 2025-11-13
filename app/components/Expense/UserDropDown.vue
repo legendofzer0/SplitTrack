@@ -24,10 +24,9 @@
 					:checked="user.id in selectedUsers"
 					@change="toggleUser(user.id, user.name)"
 				/>
-				<img
-					:src="`/${user.avatar}`"
-					alt="avatar"
-					class="w-6 h-6 rounded-full"
+				<FriendsImage
+					:is_default="user.is_default"
+					:avatar="user.avatar"
 				/>
 				<label class="text-white">{{ user.name }}</label>
 			</div>
@@ -60,6 +59,7 @@
 		id: string;
 		avatar: string;
 		name: string;
+		is_default: boolean;
 	}
 
 	const props = defineProps<{ userData: UserType[]; error: string }>();

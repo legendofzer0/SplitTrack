@@ -3,10 +3,9 @@
 		class="flex items-center justify-between p-4 bg-slate-800 rounded-2xl shadow-md border border-slate-700 hover:shadow-lg transition"
 	>
 		<div class="flex items-center gap-3">
-			<img
-				:src="`/${friend.avatar}`"
-				alt="Avatar"
-				class="w-12 h-12 rounded-full object-cover border border-slate-600"
+			<FriendsImage
+				:is_default="friend.is_default"
+				:avatar="friend.avatar"
 			/>
 			<div>
 				<h2 class="text-white font-semibold text-lg">
@@ -118,5 +117,6 @@
 		name: string;
 		email: string;
 		avatar: string;
+		is_default: boolean;
 	}
 </script>
